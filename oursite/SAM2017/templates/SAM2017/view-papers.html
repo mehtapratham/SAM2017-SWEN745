@@ -1,0 +1,11 @@
+        {%if papers %}
+            {%for paper in papers%}
+                <div>
+                <h2>{{paper.title}}</h2>
+                <blockquote>{{paper.description}}</blockquote>
+            {% endfor %}
+        {% else %}
+            <p>No papers submitted for the workshop yet </p>
+        {% endif %}
+
+        {% comment %}<a href="{% url 'SAM2017:upload_paper' %}">Submit a paper</a>{% endcomment %}

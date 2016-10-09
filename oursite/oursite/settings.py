@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'SAM2017.apps.Sam2017Config',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -114,7 +115,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-
+MEDIA_ROOT = 'C://Users//Heena/Desktop//Coursework//SWEN-745//PROJECT//SAM2017-SWEN-745//static//'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 

@@ -1,0 +1,11 @@
+<a href="/papers/">Papers</a>
+
+<form action="SAM2017/upload-paper/" method="post" enctype="multipart/form-data" {% csrf_token %} >
+                <input id="name" value="{{ form.name.value|default:'' }}" name="name" type="text"  placeholder="A study of.." required></br>
+                <textarea id="description" value="{{ form.description.value|default:'' }}" name="description" type="text" placeholder="Lorem ipsum dolor sit amet..." class="form-control input-md" required rows="5"></textarea></br>
+                <p><img src="/static/uploaded_files/{{ form.file }}"/></p>
+
+                <button id="submit" name="submit">Save</button>
+                <button id="cancel" name="cancel" onclick="window.location.href='/SAM2017/papers/'">View Papers</button>
+
+</form>
