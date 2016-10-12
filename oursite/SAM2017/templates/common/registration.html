@@ -1,0 +1,24 @@
+{% block content %}
+<div class="box">
+<form action="/register/" method="post">{% csrf_token %}
+    <div class="header1">Registration</div>
+	<p>
+        {{ form.non_field_errors }}
+        <table>
+            {% for field in form %}
+            <tr>
+                <td>{{ field.label_tag }}</td>
+                <td>{{ field }}</td>
+                <td>{{ field.errors }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </p>
+    <p>
+        <input class="myButton" type="submit" value="Register" />
+    </p>
+    <input type="hidden" name="next" value="{{ next }}" />
+</form>
+</div>
+
+{% endblock %}

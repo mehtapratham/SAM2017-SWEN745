@@ -25,7 +25,7 @@ SECRET_KEY = 'xzptr&#zt64t&&q-qzl^7=10v=q6q^su(*otr!glrtqh09zhv8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -120,3 +120,12 @@ MEDIA_ROOT = 'C://Users//Heena/Desktop//Coursework//SWEN-745//PROJECT//SAM2017-S
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# where requests are redirected FOR login
+LOGIN_URL = '/login/' # django default
+# where requests are redirected AFTER login
+LOGIN_REDIRECT_URL = '/' 
+
+# The model to use to represent a User - DO NOT CHANGE
+AUTH_USER_MODEL = 'SAM2017.SAMUser'

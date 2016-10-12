@@ -1,0 +1,56 @@
+{% block content %}
+		{% if form.errors %}
+
+	<p>Your username and password didn't match. Please try again.</p>
+	{% endif %}
+
+	{% if next %}
+		{% if user.is_authenticated %}
+			<p>Your account doesn't have access to this page. To proceed, please login with an account that has access.</p>
+		{% comment "Removed from R1" %}
+		{% else %}
+			<p>Please login to see this page.</p>
+		{% endcomment %}
+		{% endif %}
+	{% endif %}
+			   <div>
+					<div>
+						<h3>Please Sign In</h3>
+					</div>
+					<div>
+						<form method="post" action="{% url 'SAM2017.views.login' %}">
+	{% csrf_token %}
+
+							<p>
+								<table>
+									<tr>
+										<td>{{ form.username.label_tag }}</td>
+										<td>{{ form.username }}</td>
+									</tr>
+									<tr>
+										<td>{{ form.password.label_tag }}</td>
+										<td>{{ form.password }}</td>
+									</tr>
+								</table>
+							</p>
+								<p>
+									<input type="submit" value="login" class="myButton" />
+									<a class="myButton" href="../register">Register</a>
+								</p>
+							<input type="hidden" name="next" value="{{ next }}" />
+						</form>
+						
+						
+					</div>
+				</div>
+
+	{% endblock %}
+	{% block javascript %}
+
+
+	<script>
+	{% if not user.is_authenticated %}
+	{% endif %}
+	</script>
+
+	{% endblock %}

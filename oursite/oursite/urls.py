@@ -13,11 +13,26 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url,include
+from django.conf import settings
+from django.conf.urls import include, url
 from django.contrib import admin
-
+from django.contrib.auth import views
+from django.core.urlresolvers import reverse
+from SAM2017 import views
+from SAM2017.forms import *
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^SAM2017/', include('SAM2017.urls', namespace='SAM2017')),
+	#index page, i.e. Homepage after log-in
+	url(r'^$', views.home, name='home'),
+	
+	#Log-in page
+	url(r'^login/$',views.login, {'template_name': 'user/login.html', 'authentication_form': LoginForm}, name="login"),
+	#url(r'^logout/$', views.logout, {'next_page': '/login'}),
+	
+	#registration page
+	url(r'^register/$',views.register, name='register'),
+	url(r'^register/success$', views.register_complete, name='register_complete'),
+	
+	url(r'^papers/$', views.view_papers, name='papers'),
+	url(r'^upload-paper/$', views.upload_paper, name='upload-paper'),
 ]
