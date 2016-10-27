@@ -1,3 +1,17 @@
+<html>
+<head>
+<title>SAM 2017</title>
+</head>
+<style>
+#divbox{
+margin-top:200px;
+margin-left:500px;
+width:350px;
+background-color:#EFFBF5;
+border: 2px solid #086D00;
+}
+</style>
+<body>
 {% block content %}
 		{% if form.errors %}
 
@@ -13,7 +27,7 @@
 		{% endcomment %}
 		{% endif %}
 	{% endif %}
-			   <div>
+			   <div id="divbox">
 					<div>
 						<h3>Please Sign In</h3>
 					</div>
@@ -54,3 +68,5 @@
 	</script>
 
 	{% endblock %}
+</body>
+</html>

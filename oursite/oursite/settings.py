@@ -115,12 +115,13 @@ USE_L10N = True
 
 USE_TZ = True
 
-MEDIA_ROOT = 'C://Users//Heena/Desktop//Coursework//SWEN-745//PROJECT//SAM2017-SWEN-745//static//'
+MEDIA_URL = '/media/'
+MEDIA_ROOT =  BASE_DIR + '/doc-uploads'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
-
+STATIC_ROOT = 'os.path.join(REPOSITORY_ROOT,"media/")'
 
 # where requests are redirected FOR login
 LOGIN_URL = '/login/' # django default

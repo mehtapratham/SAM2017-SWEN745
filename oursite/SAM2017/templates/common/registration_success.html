@@ -1,6 +1,28 @@
+<html>
+<head>
+<title>SAM 2017</title>
+</head>
+<style>
+#divbox{
+margin-top:200px;
+margin-left:400px;
+width:300px;
+background-color:#EFFBF5;
+border: 2px solid #086D00;
+}
+</style>
+<body>
 {% block content %}
+<div id="divbox">
 <h2>Thanks for Registering!<br>
 <br>
 Please <a href="/login/">login</a> to continue.</h2>
-
+<form action="/login/">
+<p>
+        <input class="myButton" type="submit" value="Log-In" />
+    </p>
+</form>
+</div>
 {% endblock %}
+</body>
+</html>

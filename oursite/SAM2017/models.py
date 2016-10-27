@@ -7,6 +7,7 @@ from django.core.validators import RegexValidator
 from datetime import datetime, date, time
 from django.template.defaulttags import register
 from django.db.models import Q
+from time import time
 
 # the templates use this to lookup the text for each enum int
 @register.filter
@@ -80,10 +81,11 @@ class Author(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.name
-
+		
+		
 def get_upload_file_name(instance, filename):
     return 'uploaded_files/%s_%s' % (str(time()).replace('.', '_'), filename)
-
+	
 class Paper(models.Model):
     title = models.CharField(max_length=300)
     description = models.TextField()
@@ -93,5 +95,3 @@ class Paper(models.Model):
 
     def __str__(self):
         return self.title
-
-

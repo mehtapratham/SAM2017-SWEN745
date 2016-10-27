@@ -1,11 +1,29 @@
-<a href="/papers/">Papers</a>
+{% extends 'common/base.html' %}
+{% block title %}SAM2017- Upload Paper{% endblock %}
+{% block navbar_upload-paper %}active{% endblock %}
 
-<form action="SAM2017/upload-paper/" method="post" enctype="multipart/form-data" {% csrf_token %} >
-                <input id="name" value="{{ form.name.value|default:'' }}" name="name" type="text"  placeholder="A study of.." required></br>
-                <textarea id="description" value="{{ form.description.value|default:'' }}" name="description" type="text" placeholder="Lorem ipsum dolor sit amet..." class="form-control input-md" required rows="5"></textarea></br>
-                <p><img src="/static/uploaded_files/{{ form.file }}"/></p>
+{% block body %}
 
-                <button id="submit" name="submit">Save</button>
-                <button id="cancel" name="cancel" onclick="window.location.href='/SAM2017/papers/'">View Papers</button>
 
+{% comment %}<button id="viewpapers" name="viewpapers" class="btn btn-default" onclick="window.location.href=/SAM2017/papers/'">Papers</button>{% endcomment %}
+
+<form action="/upload-paper/" method="post" class="form-horizontal" enctype="multipart/form-data" >{% csrf_token %}
+    <div class="container container-fluid">
+        <div class ="form-group">
+            <label for="title">Title</label>
+            <input class="form-control" id="title" value="{{form.title.value}}" name="title" type="text"  placeholder="A study of.." required></br>
+        </div>
+        <div class ="form-group">
+            <label for="description">Description</label>
+            <textarea class="form-control" id="description" value="{{form.description.value}}" name="description" type="text" placeholder="Brief description of the papers content..." class="form-control input-md" required rows="5"></textarea></br>
+        </div>
+        <div class ="form-group">
+            <label for="title">Paper</label>
+            <p><input id="file" name= "file" type="file"></p>
+        </div>
+        <button id="submit" name="submit" class="btn btn-success">Submit Paper</button>
+        <button id="cancel" name="cancel" class="btn btn-warning" onclick="window.location.href='/SAM2017/papers/'">Cancel</button>
+    </div>
 </form>
+
+{% endblock %}

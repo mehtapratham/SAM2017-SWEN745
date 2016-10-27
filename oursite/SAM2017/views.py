@@ -28,27 +28,36 @@ home_page = reverse_lazy("home")
 
 #index page, i.e. Homepage after log-in
 @login_required(login_url=SAM_login_url)
-def home(request):
-    return render_to_response('common/home.html')
+def index(request):
+    return render_to_response('common/index.html')
 
-	
+@login_required(login_url=SAM_login_url)	
 def upload_paper(request):
     if request.POST:
         form = PaperForm(request.POST,request.FILES)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('SAM2017/papers')
+            return HttpResponseRedirect('/common/papers')
     else:
         form = PaperForm()
     args={}
     args.update(csrf(request))
     args['form']=form
-    return render_to_response(request,'common/upload-paper.html',args)
+    return render_to_response('common/upload-paper.html',args)
 
+@login_required(login_url=SAM_login_url)
 def view_papers(request):
     papers = Paper.objects.all()
     context = {'papers': papers}
-    return render(request, 'SAM2017/templates/common/view-papers.html', context)
+    return render(request, 'common/view-papers.html', context, context_instance=RequestContext(request))
+
+'''
+def download_paper(request,papername):
+    paper_name = papername
+    response = HttpResponse(paper_name,content_type='')
+    response['Content-Disposition']
+'''
+
 
 #Registration-----------------------------------------------------------------------
 def register(request):

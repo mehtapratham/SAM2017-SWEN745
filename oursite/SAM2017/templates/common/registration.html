@@ -1,7 +1,22 @@
+<html>
+<head>
+<title>SAM 2017 Registration</title>
+</head>
+<style>
+#divbox{
+margin-top:100px;
+margin-left:350px;
+width:450px;
+background-color:#EFFBF5;
+border: 2px solid #086D00;
+}
+</style>
+<body>
+
 {% block content %}
-<div class="box">
+<div id="divbox">
 <form action="/register/" method="post">{% csrf_token %}
-    <div class="header1">Registration</div>
+    <div class="header1"><h3>Registration</h3></div>
 	<p>
         {{ form.non_field_errors }}
         <table>
@@ -22,3 +37,5 @@
 </div>
 
 {% endblock %}
+</body>
+</html>

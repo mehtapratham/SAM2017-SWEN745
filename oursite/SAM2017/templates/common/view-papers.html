@@ -1,11 +1,27 @@
-        {%if papers %}
-            {%for paper in papers%}
+{% extends 'common/base.html' %}
+{% block title %}SAM2017-View Papers{% endblock %}
+{% block navbar_view-papers %}active{% endblock %}
+
+{% block body %}
+<div class="container container-fluid">
+    {%if papers %}
+        <ul class="list-group">
+        {%for paper in papers%}
+            <li class="list-group-item">
                 <div>
                 <h2>{{paper.title}}</h2>
-                <blockquote>{{paper.description}}</blockquote>
-            {% endfor %}
-        {% else %}
-            <p>No papers submitted for the workshop yet </p>
-        {% endif %}
 
-        {% comment %}<a href="{% url 'SAM2017:upload_paper' %}">Submit a paper</a>{% endcomment %}
+                <blockquote>{{paper.description}}</blockquote>
+                <form method="get" action="paper-uploads/{{ paper.file }}" target="_blank">
+                    <button  class="btn btn-primary" type="submit" disabled>Download Paper</button>
+                </form>
+                </div>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No papers submitted for the workshop yet </p>
+    {% endif %}
+</div>
+{% endblock %}
+    {% comment %}<a href="{% url 'SAM2017:upload_paper' %}">Submit a paper</a>{% endcomment %}
