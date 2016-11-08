@@ -47,10 +47,8 @@ class SAMUser(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(verbose_name='first name', max_length=30, unique=False, null=False)
     last_name = models.CharField(verbose_name='last name', max_length=30, unique=False, null=True)
     phone_number = models.CharField(verbose_name='phone number', blank=True, max_length=15)
-    is_author = models.BooleanField(default=True)
-    is_pcm = models.BooleanField(default=False)
-    is_pcc = models.BooleanField(default=False)
     address = models.CharField(verbose_name='address', max_length=255, null=True, blank=True)
+    is_admin = models.BooleanField(default=None, blank=True)
 
     objects = SAMUserManager()
     USERNAME_FIELD = 'username'
@@ -74,7 +72,7 @@ class SAMUser(AbstractBaseUser, PermissionsMixin):
         return True
 
 
-class Author(models.Model):
+class Author(SAMUser):
     name = models.CharField(max_length=20)
     email = models.EmailField()
     created_on = models.DateTimeField(auto_now_add=True)
@@ -98,20 +96,12 @@ class Paper(models.Model):
         return self.title
 
 
-class PCC(models.Model):
-    associated_user = models.ForeignKey(SAMUser, on_delete=models.CASCADE)
+class PCC(SAMUser):
+    # associated_user = models.ForeignKey(SAMUser, on_delete=models.CASCADE)
     papers_assigned = models.ManyToManyField(Paper)
 
 
-class PCM(models.Model):
-    associated_user = models.ForeignKey(SAMUser, on_delete=models.CASCADE)
+class PCM(SAMUser):
+    # associated_user = models.ForeignKey(SAMUser, on_delete=models.CASCADE)
     paper_selections = models.ManyToManyField(Paper, related_name="paper_selections")
     papers_assigned = models.ManyToManyField(Paper, related_name="papers_assigned")
-
-
-class Admin(models.Model):
-    associated_user = models.ForeignKey(SAMUser, on_delete=models.CASCADE)
-
-
-
-
