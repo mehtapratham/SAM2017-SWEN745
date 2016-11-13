@@ -38,6 +38,8 @@ urlpatterns = [
 	url(r'^register/$',views.register, name='register'),
 	url(r'^register/success$', views.register_complete, name='register_complete'),
 	
-	url(r'^common/papers/$', views.view_papers, name='view-papers'),
+	url(r'^papers/$', views.view_papers, name='view-papers'),
 	url(r'^upload-paper/$', views.upload_paper, name='upload-paper'),
+
+	url(r'^notifications/$', views.view_notifications, name='view-notifications')
 ]

@@ -1,0 +1,22 @@
+{% extends 'common/base.html' %}
+{% block title %}SAM2017 - View Notifications{% endblock %}
+{% block navbar_view-notifications %}active{% endblock %}
+
+{% block body %}
+    {% comment %}{% if user.is_authenticated %}{% endcomment %}
+    {% if notifications %}
+        <ul class="list-group">
+        {% for notification in notifications %}
+            <li class="list-group-item">
+            <strong>{{ notification.title }}</strong>
+            <h5>{{ notification.message }}</h5>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p> You have no notifications</p>
+    {% endif %}
+   {% comment %} {% else %}
+        <p>Please login to view your notifications</p>
+    {% endif %}{% endcomment %}
+{% endblock %}
