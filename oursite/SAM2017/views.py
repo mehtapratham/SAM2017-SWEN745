@@ -37,7 +37,12 @@ def upload_paper(request):
         form = PaperForm(request.POST,request.FILES)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/common/papers')
+            notification = Notification()
+            #pcc = PCC.objects.get(id=2) - will get PCC when available
+            users = [request.user] # sending notification to author temporarily
+            notification.save()
+            notification.sendNotification('NEW_PAPER', users)
+            return HttpResponseRedirect('/papers/')
     else:
         form = PaperForm()
     args={}
@@ -142,6 +147,9 @@ def login(request, template_name='common/login.html',
 
     return TemplateResponse(request, 'common/login.html', context)
 
+def view_notifications(request):
+    notifications = Notification.objects.filter(recipients = request.user)
+    return render(request,'common/view-notifications.html',{'notifications':notifications})
 #Review and Rating
 def reviewRating(request):
     papers = Paper.objects.get(id=2)

@@ -41,6 +41,7 @@ class UserCreationForm(UserCreationForm):
         user.last_name = self.cleaned_data["last_name"]
         user.address = self.cleaned_data["address"]
         user.phone_number = self.cleaned_data["phone_number"]
+        user.is_admin = False
         if commit:
             # save the user properties to the db fields
             user.save()
