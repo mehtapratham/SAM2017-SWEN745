@@ -45,3 +45,8 @@ class UserCreationForm(UserCreationForm):
             # save the user properties to the db fields
             user.save()
         return user
+
+class ReviewRateForm(forms.ModelForm):
+    class Meta:
+        model = ReviewRating
+        fields = ('review','rating')

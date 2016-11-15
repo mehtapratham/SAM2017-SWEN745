@@ -95,3 +95,13 @@ class Paper(models.Model):
 
     def __str__(self):
         return self.title
+
+class ReviewRating(models.Model):
+    reviwer = models.ForeignKey(SAMUser, null=False,blank=False,default=False)
+    paper = models.ForeignKey(Paper,null=False,blank=False,default=False)
+    review = models.TextField()
+    rating = models.IntegerField()
+    is_Final = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.review

@@ -20,24 +20,26 @@ from django.contrib.auth import views
 from django.core.urlresolvers import reverse
 from SAM2017 import views
 from SAM2017.forms import *
-from django.conf.urls import url,include
+from django.conf.urls import url, include
 from django.contrib import admin
 
 urlpatterns = [
-	#index page, i.e. Homepage after log-in
-	url(r'^$', views.index, name='index'),
-	
-	#Log-in page
-	url(r'^login/$',views.login, {'template_name': 'user/login.html', 'authentication_form': LoginForm}, name="login"),
-	#url(r'^logout/$', views.logout, {'next_page': '/login'}),
-	
-	url(r'^admin/', admin.site.urls),
-	url(r'^SAM2017/', include('SAM2017.urls', namespace='SAM2017')),
-	
-	#registration page
-	url(r'^register/$',views.register, name='register'),
-	url(r'^register/success$', views.register_complete, name='register_complete'),
-	
-	url(r'^common/papers/$', views.view_papers, name='view-papers'),
-	url(r'^upload-paper/$', views.upload_paper, name='upload-paper'),
+    # index page, i.e. Homepage after log-in
+    url(r'^$', views.index, name='index'),
+
+    # Log-in page
+    url(r'^login/$', views.login, {'template_name': 'user/login.html', 'authentication_form': LoginForm}, name="login"),
+    # url(r'^logout/$', views.logout, {'next_page': '/login'}),
+
+    url(r'^admin/', admin.site.urls),
+    url(r'^SAM2017/', include('SAM2017.urls', namespace='SAM2017')),
+
+    # registration page
+    url(r'^register/$', views.register, name='register'),
+    url(r'^register/success$', views.register_complete, name='register_complete'),
+
+    url(r'^common/papers/$', views.view_papers, name='view-papers'),
+    url(r'^upload-paper/$', views.upload_paper, name='upload-paper'),
+
+    url(r'^review-rate/$', views.reviewRating, name='review-rate'),
 ]

@@ -141,3 +141,36 @@ def login(request, template_name='common/login.html',
         context.update(extra_context)
 
     return TemplateResponse(request, 'common/login.html', context)
+
+#Review and Rating
+def reviewRating(request):
+    papers = Paper.objects.get(id=2)
+    user = SAMUser.objects.get(id=2)
+    if request.method == 'POST':
+
+        # create a form instance and populate it with data from the request
+        form = ReviewRateForm(data=request.POST)
+
+        if form.is_valid():
+            ReviewRating.reviwer = user.id
+            ReviewRating.paper = papers.id
+            #reviewer = form.cleaned_data['reviewer']
+           # paper = form.cleaned_data['paper']
+            review = form.cleaned_data['review']
+            rating = form.cleaned_data['rating']
+            #is_final = form.cleaned_data['is_final']
+            form.save()
+
+            # redirect to home page
+            return render_to_response('common/index.html')
+            #return redirect('https://localhost:8000')
+            # else:
+            # form-data did not validate against form-class rules
+            # form innerhtml now contains any password error messages
+    else:
+        form = ReviewRateForm()
+
+    token = {}
+    token.update(csrf(request))
+    token['form'] = form
+    return render_to_response('common/review-rate.html',token)
