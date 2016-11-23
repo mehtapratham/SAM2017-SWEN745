@@ -29,7 +29,17 @@ home_page = reverse_lazy("home")
 #index page, i.e. Homepage after log-in
 @login_required(login_url=SAM_login_url)
 def index(request):
+    u_id=request.user.id
+    if(PCC.objects.filter(id = u_id)):
+        return render_to_response('common/pcc_home.html')
+    elif(PCM.objects.filter(id = u_id)):
+        return render_to_response('common/pcm_home.html')
     return render_to_response('common/index.html')
+
+@login_required(login_url=SAM_login_url)
+def pcc_home(request):
+    id=request.user.id
+    return render_to_response('common/pcc_home.html')
 
 @login_required(login_url=SAM_login_url)	
 def upload_paper(request):
