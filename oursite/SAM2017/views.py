@@ -30,10 +30,12 @@ home_page = reverse_lazy("home")
 @login_required(login_url=SAM_login_url)
 def index(request):
     u_id=request.user.id
+    token={}
     if(PCC.objects.filter(id = u_id)):
         return render_to_response('common/pcc_home.html')
     elif(PCM.objects.filter(id = u_id)):
-        return render_to_response('common/pcm_home.html')
+        token['papers'] = Paper.objects.all()
+        return render_to_response('common/pcm_home.html',token)
     return render_to_response('common/index.html')
 
 @login_required(login_url=SAM_login_url)
@@ -65,6 +67,17 @@ def view_papers(request):
     papers = Paper.objects.all()
     context = {'papers': papers}
     return render(request, 'common/view-papers.html', context, context_instance=RequestContext(request))
+
+
+
+
+
+@login_required(login_url=SAM_login_url)
+def paper_details(request,paperId):
+    paper = Paper.objects.get(id=paperId)
+    token={}
+    token['paper']=paper
+    return render_to_response('common/paper-details.html',token)
 
 '''
 def download_paper(request,papername):
@@ -161,24 +174,23 @@ def view_notifications(request):
     notifications = Notification.objects.filter(recipients = request.user)
     return render(request,'common/view-notifications.html',{'notifications':notifications})
 #Review and Rating
-def reviewRating(request):
-    papers = Paper.objects.get(id=2)
-    user = SAMUser.objects.get(id=2)
+def reviewRating(request,paperId):
+    papers = Paper.objects.get(id=paperId)
+    user = request.user
     if request.method == 'POST':
 
         # create a form instance and populate it with data from the request
         form = ReviewRateForm(data=request.POST)
 
         if form.is_valid():
-            ReviewRating.reviwer = user.id
-            ReviewRating.paper = papers.id
+            new = ReviewRating(reviwer_id = user.id,paper_id = papers.id,review = form.cleaned_data["review"],rating = form.cleaned_data["rating"])
             #reviewer = form.cleaned_data['reviewer']
            # paper = form.cleaned_data['paper']
-            review = form.cleaned_data['review']
-            rating = form.cleaned_data['rating']
+           # review = form.cleaned_data['review']
+            #rating = form.cleaned_data['rating']
             #is_final = form.cleaned_data['is_final']
-            form.save()
-
+            #form.save()
+            new.save()
             # redirect to home page
             return render_to_response('common/index.html')
             #return redirect('https://localhost:8000')
