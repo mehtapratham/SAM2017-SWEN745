@@ -42,6 +42,7 @@ urlpatterns = [
     url(r'^upload-paper/$', views.upload_paper, name='upload-paper'),
     url(r'^paper-details/(?P<paperId>[0-9]+)/$', views.paper_details, name='paper-details'),
 
+    url(r'^paper_assignment/$', views.paper_assignment, name='paper_assignment'),
     url(r'^review-rate/(?P<paperId>\d+)', views.reviewRating, name='review-rate'),
 	url(r'^notifications/$', views.view_notifications, name='view-notifications')
 ]

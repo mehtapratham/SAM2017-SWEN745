@@ -32,7 +32,10 @@ def index(request):
     u_id=request.user.id
     token={}
     if(PCC.objects.filter(id = u_id)):
-        return render_to_response('common/pcc_home.html')
+        token['papers'] = Paper.objects.all()
+        token['papers_assigned '] = PCM.objects.all()
+        token['papers_reviewed'] = ReviewRating.objects.all()
+        return render_to_response('common/pcc_home.html',token)
     elif(PCM.objects.filter(id = u_id)):
         token['papers'] = Paper.objects.all()
         return render_to_response('common/pcm_home.html',token)
@@ -68,7 +71,10 @@ def view_papers(request):
     context = {'papers': papers}
     return render(request, 'common/view-papers.html', context, context_instance=RequestContext(request))
 
-
+@login_required(login_url=SAM_login_url)
+def paper_assignment(request):
+    token={}
+    return render_to_response("common/paper_assignment.html",token)
 
 
 
