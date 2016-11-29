@@ -57,6 +57,12 @@
                             Logout
                         </a>
                     </li>{% endcomment %}
+                    <li class="{% block navbar_view-notifications %}{% endblock %}">
+                        <a href="{% url 'view-notifications' %}">
+                            <span class="glyphicon glyphicon-bell" aria-hidden="true"></span>&nbsp;
+                            Notifications
+                        </a>
+                    </li>
 
                 {% comment %}{% else %}
 

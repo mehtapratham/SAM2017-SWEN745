@@ -1,0 +1,29 @@
+{% extends 'common/base.html' %}
+{% block title %}SAM2017 - View Paper Details{% endblock %}
+{% block navbar_view_paper_details %}active{% endblock %}
+
+{% block body %}
+    {% comment %}{% if user.is_authenticated %}{% endcomment %}
+    {% if paper %}
+        <ul class="list-group">
+        
+            <li class="list-group-item">
+            <strong>{{ paper.title }}</strong>
+            <p>{{ paper.description }}</p>
+                <ul>
+                {% for author in paper.authors.all %}
+                    <li>
+                        {{ author }}
+                        
+                    </li>
+                {% endfor %}
+                </ul>
+            </li>
+            <a class="btn btn-primary" href="review-rate/{{paper.id}}/">Review and Rate Paper</a>
+        </ul>
+        
+    {% else %}
+        <p> No paper with this ID exists</p>
+    {% endif %}
+  
+{% endblock %}

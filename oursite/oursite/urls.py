@@ -44,5 +44,8 @@ urlpatterns = [
 
     url(r'^paper_assignment/$', views.paper_assignment, name='paper_assignment'),
     url(r'^review-rate/(?P<paperId>\d+)', views.reviewRating, name='review-rate'),
-	url(r'^notifications/$', views.view_notifications, name='view-notifications')
+	url(r'^notifications/$', views.view_notifications, name='view-notifications'),
+
+    url(r'^deadlines/$', views.view_deadlines, name='view-deadlines'),
+    url(r'^update-deadlines/$', views.update_deadlines, name='update-deadlines'),
 ]

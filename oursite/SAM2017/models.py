@@ -76,13 +76,13 @@ class SAMUser(AbstractBaseUser, PermissionsMixin):
         return True
 
 
-class Author(SAMUser):
-    name = models.CharField(max_length=20)
-    email = models.EmailField()
-    created_on = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.name
+# class Author(SAMUser):
+#     name = models.CharField(max_length=20)
+#     email = models.EmailField()
+#     created_on = models.DateTimeField(auto_now_add=True)
+#
+#     def __str__(self):
+#         return self.name
 
 
 def get_upload_file_name(instance, filename):
@@ -93,7 +93,7 @@ class Paper(models.Model):
     title = models.CharField(max_length=300)
     description = models.TextField()
     # upload_date = models.DateField(auto_now_add=True)
-    authors = models.ManyToManyField(Author)
+    authors = models.ManyToManyField(SAMUser)
     file = models.FileField(upload_to=get_upload_file_name)
 
     def __str__(self):
@@ -147,6 +147,24 @@ class Notification(models.Model):
         notification.recipients.set(recipients)
         print("In here - Saving notifications")
         notification.save()
+
+class Deadline(models.Model):
+    PSD = 'PSD'
+    RCD = 'RCD'
+    RSD = 'RSD'
+    AND = 'AND'
+    DEADLINE_CHOICES = (
+        (PSD, "Paper Submission Deadline"),
+        (RCD, "Review Choice Deadline"),
+        (RSD, "Review Submission Deadline"),
+        (AND, "Author notification Deadline")
+    )
+    deadline_type = models.CharField(max_length=5,choices=DEADLINE_CHOICES)
+    deadline_name = models.TextField(blank=False,default='Deadline')
+    deadline_date = models.DateField(auto_now=False,auto_now_add=False)
+
+    def __str__(self):
+        return str(self.deadline_date)
 
 
 

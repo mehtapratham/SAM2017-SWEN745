@@ -9,15 +9,19 @@
         {%for paper in papers%}
             <li class="list-group-item">
                 <div>
-                <h2>{{paper.title}}</h2>
+                <h2><a href="paper-details/{{paper.id}}/">{{paper.title}}</a></h2>
 
                 <blockquote>{{paper.description}}</blockquote>
+
                 <form method="get" action="paper-uploads/{{ paper.file }}" target="_blank">
                     <button  class="btn btn-primary" type="submit" disabled>Download Paper</button>
                 </form>
                 </div>
             </li>
         {% endfor %}
+        {%if ratings %}
+                   {% for key,value in ratings.items %}{{ value }}{% endfor %}
+        {% endif %}
         </ul>
     {% else %}
         <p>No papers submitted for the workshop yet </p>

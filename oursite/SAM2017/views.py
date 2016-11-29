@@ -210,3 +210,83 @@ def reviewRating(request,paperId):
     token.update(csrf(request))
     token['form'] = form
     return render_to_response('common/review-rate.html',token)
+
+def view_paper_details(request,paperId):
+    paper = Paper.objects.get(pk = paperId)
+    context = {'paper' : paper}
+    return render(request,"common/view-paper-detail.html",context)
+
+def view_deadlines(request):
+    deadlines = Deadline.objects.all()
+    deadline_dict={ 'PSD': "Paper Submission Deadline",
+                    'RCD': "Review Choice Deadline",
+                    'RSD': "Review Submission Deadline",
+                    'AND': "Author notification Deadline"
+                  }
+    context = {'deadlines':deadlines,'mapper':deadline_dict}
+    return render(request,'common/view_deadlines.html',context)
+
+@login_required(login_url=SAM_login_url)
+def update_deadlines(request):
+
+    if request.POST:
+
+        selectedPSDDeadline = (request.POST.get('psdDeadlineId'))
+        if selectedPSDDeadline is not None:
+            deadline_1 = Deadline.objects.get(deadline_type='PSD')
+            deadline_1.deadline_date = selectedPSDDeadline
+            deadline_1.save()
+            # notification = Notification()
+            # recipients = [SAMUser]
+            # notification.sendNotification("Paper_Submission_Deadline", psd_deadline.id, recipients)
+
+
+
+        selectedRCDDeadline = (request.POST.get('rcdDeadlineId'))
+        if selectedRCDDeadline is not None:
+            deadline_2 = Deadline.objects.get(deadline_type='RCD')
+            deadline_2.deadline_date = selectedRCDDeadline
+            deadline_2.save()
+            # notification = Notification()
+            # recipients = [SAMUser]
+            # notification.sendNotification("Review_Choice_Deadline", rcd_deadline.id, recipients)
+
+
+        selectedRSDDeadline = (request.POST.get('rsdDeadlineId'))
+        if selectedRSDDeadline is not None:
+            deadline_3 = Deadline.objects.get(deadline_type='RSD')
+            deadline_3.deadline_date = selectedRSDDeadline
+            deadline_3.save()
+            # notification = Notification()
+            # recipients = [SAMUser]
+            # notification.sendNotification("Review_Submission_Deadline", rcd_deadline.id, recipients)
+
+
+        selectedANDDeadline = (request.POST.get('andDeadlineId'))
+        if selectedANDDeadline is not None:
+            deadline_4 = Deadline.objects.get(deadline_type='AND')
+            deadline_4.deadline_date = selectedANDDeadline
+            deadline_4.save()
+            # notification = Notification()
+            # recipients = [SAMUser]
+            # notification.sendNotification("Auther_Submission_Deadline", and_deadline.id, recipients)
+
+        return HttpResponseRedirect('/deadlines/')
+    else:
+
+
+        deadline_1 = get_object_or_404(Deadline,deadline_type='PSD')
+        deadline_2 = get_object_or_404(Deadline,deadline_type='RCD')
+        deadline_3 =get_object_or_404(Deadline,deadline_type='RSD')
+        deadline_4 = get_object_or_404(Deadline,deadline_type='AND')
+
+        args={}
+        args.update(csrf(request))
+        args['psd_deadline_date'] = deadline_1.deadline_date
+        args['rcd_deadline_date'] = deadline_2.deadline_date
+        args['rsd_deadline_date'] = deadline_3.deadline_date
+        args['and_deadline_date'] = deadline_4.deadline_date
+
+    return render_to_response('common/update_deadlines.html',args, context_instance=RequestContext(request))
+
+
