@@ -1,0 +1,109 @@
+{% extends 'common/base.html' %}
+{% block title %}SAM2017- Set Deadlines{% endblock %}
+{% block navbar_upload-paper %}active{% endblock %}
+
+{% block body %}
+<script>
+ $(function () {
+
+     $('.date').datepicker({
+           changeMonth: true,
+           changeYear: true,
+     });
+        });
+
+</script>
+<form action="/update-deadlines/" method="post" class="form-horizontal">{% csrf_token %}
+     <fieldset>
+        <div class="container container-fluid">
+
+        <div class ="form-group">
+            <label for="psd_deadline_date">Paper Submission Deadline</label>
+            <input id="psd_deadline_date" value="{{ psd_deadline_date}}" name="psd_deadline_date" type="text" class="form-control input-md date" readonly style="cursor:pointer; background-color: #FFFFFF">
+            {{ form.errors.deadline_date }}
+        </div>
+
+        <div class ="form-group">
+            <label for="rcd_deadline_date">Review Choice Deadline</label>
+            <input id="rcd_deadline_date" value="{{ rcd_deadline_date}}" name="rcd_deadline_date" type="text"  class="form-control input-md date" readonly style="cursor:pointer; background-color: #FFFFFF">
+            {{ form.errors.deadline_date }}
+        </div>
+        <div class ="form-group">
+            <label for="rsd_deadline_date">Review Submission Deadline</label>
+            <input id="rsd_deadline_date" value="{{ rsd_deadline_date }}" name="rsd_deadline_date" type="text"  class="form-control input-md date" readonly style="cursor:pointer; background-color: #FFFFFF">
+            {{ form.errors.deadline_date }}
+        </div>
+        <div class ="form-group">
+            <label for="and_deadline_date">Author Notification Deadline</label>
+            <input id="and_deadline_date" value="{{ and_deadline_date}}" name="and_deadline_date" type="text"  class="form-control input-md date" readonly style="cursor:pointer; background-color: #FFFFFF">
+            {{ form.errors.deadline_date }}
+        </div>
+
+         <div class="form-group">
+             <button id="submit" name="submit" class="btn btn-success" onclick="UpdateDeadlines()">Save</button>
+             <Span id="cancel" name="cancel" class="btn btn-warning" onclick="window.location.href='/SAM2017/deadlines/'">Cancel</Span>
+         </div>
+
+
+        </div>
+
+            <div style="display: none">
+                <input type="text" id="psdDeadlineId" name="psdDeadlineId">
+                <button type="submit" id="dummypsdDeadlineButton" value="submit">Submit</button>
+            </div>
+
+
+            <div style="display: none">
+                <input type="text" id="rcdDeadlineId" name="rcdDeadlineId">
+                <button type="submit" id="dummyrcdDeadlineButton" value="submit">Submit</button>
+            </div>
+
+            <div style="display: none">
+                <input type="text" id="rsdDeadlineId" name="rsdDeadlineId">
+                <button type="submit" id="dummyrsdDeadlineButton" value="submit">Submit</button>
+            </div>
+
+            <div style="display: none">
+                <input type="text" id="andDeadlineId" name="andDeadlineId">
+                <button type="submit" id="dummyandDeadlineButton" value="submit">Submit</button>
+            </div>
+
+          </fieldset>
+</form>
+
+   <script>
+          function UpdateDeadlines(){
+
+
+                        var date1 = $('#psd_deadline_date').datepicker("getDate");
+                        var datestring1 = $.datepicker.formatDate('yy-mm-dd',date1);
+
+                        $('#psdDeadlineId').val(datestring1);
+                        $('#dummypsdDeadlineButton').click();
+
+                          var date2 = $('#rsd_deadline_date').datepicker("getDate");
+                        var datestring2 = $.datepicker.formatDate('yy-mm-dd',date2);
+
+                        $('#rsdDeadlineId').val(datestring2);
+                        $('#dummyrsdDeadlineButton').click();
+
+
+                          var date3 = $('#rcd_deadline_date').datepicker("getDate");
+                        var datestring3 = $.datepicker.formatDate('yy-mm-dd',date3);
+
+                        $('#rcdDeadlineId').val(datestring3);
+                        $('#dummyrcdDeadlineButton').click();
+
+                          var date4 = $('#and_deadline_date').datepicker("getDate");
+                        var datestring4 = $.datepicker.formatDate('yy-mm-dd',date4);
+
+                        $('#andDeadlineId').val(datestring4);
+                        $('#dummyandDeadlineButton').click();
+
+
+           }
+
+
+     </script>
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'common/base.html' %}
+{% block title %}SAM2017-View Deadlines{% endblock %}
+{% block navbar_view-papers %}active{% endblock %}
+
+{% block body %}
+<div class="container container-fluid">
+    {%if deadlines %}
+        <ul class="list-group">
+        {%for deadline in deadlines%}
+            <li class="list-group-item">
+                <div>
+                    <h2>{{deadline.deadline_name}}</h2>
+                    <p>{{deadline.deadline_date}}</p>
+
+                </div>
+            </li>
+        {% endfor %}
+        </ul>
+
+       <button type="button" class="btn btn-success" onclick="window.location.href='/update-deadlines'">Update Deadlines</button>
+    {% else %}
+        <p>No deadlines in the system yet</p>
+    {% endif %}
+</div>
+{% endblock %}
