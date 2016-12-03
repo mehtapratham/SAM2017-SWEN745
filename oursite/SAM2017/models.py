@@ -51,7 +51,7 @@ class SAMUser(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(verbose_name='last name', max_length=30, unique=False, null=True)
     phone_number = models.CharField(verbose_name='phone number', blank=True, max_length=15)
     address = models.CharField(verbose_name='address', max_length=255, null=True, blank=True)
-    is_admin = models.BooleanField(default=None, blank=True)
+    #is_admin = models.BooleanField(default=None,blank=True)
     #is_staff = models.BooleanField(_('staff status'), default=False,help_text=_('Designates whether the user can log into this admin 'site.'))
 
     objects = SAMUserManager()
@@ -93,7 +93,7 @@ class Paper(models.Model):
     title = models.CharField(max_length=300)
     description = models.TextField()
     # upload_date = models.DateField(auto_now_add=True)
-    authors = models.ManyToManyField(SAMUser)
+    authors = models.CharField(max_length=15)
     file = models.FileField(upload_to=get_upload_file_name)
 
     def __str__(self):
@@ -116,8 +116,19 @@ class PCC(SAMUser):
 
 class PCM(SAMUser):
     # associated_user = models.ForeignKey(SAMUser, on_delete=models.CASCADE)
-    paper_selections = models.ManyToManyField(Paper, related_name="paper_selections")
-    papers_assigned = models.ManyToManyField(Paper, related_name="papers_assigned")
+    papers_selections = models.ManyToManyField(Paper)
+
+
+class papers_selection(models.Model):
+    pcm=models.ForeignKey(PCM)
+    selected_paper = models.ForeignKey(Paper)
+    decisions = models.BooleanField(default=False)
+
+    @classmethod
+    def create(cls,pcm_user,pap):
+        selection = cls(pcm_id=pcm_user,selected_paper_id=pap,decisions=False)
+        selection.save()
+        return selection
 
 class Notification(models.Model):
     title = models.CharField(max_length=500, verbose_name=u"Title")

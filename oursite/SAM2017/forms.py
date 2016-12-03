@@ -11,7 +11,7 @@ from datetime import datetime, date, time, timedelta
 class PaperForm(forms.ModelForm):
     class Meta:
         model = Paper
-        fields = ('title','description','file')
+        fields = ('title','description','file','authors')
 		
 class LoginForm(AuthenticationForm):
     username = forms.CharField(label="Email", max_length=30)

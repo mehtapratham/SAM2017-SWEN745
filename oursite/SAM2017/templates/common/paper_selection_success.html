@@ -8,14 +8,6 @@
         <h2>Welcome PCM to SAM2017 </h2>
         <p>International Conference on Software Architecture Mining</p>
         <p>Feb 2017</p>
-        <h4>List of papers for the conference</h4>
-        {% for paper in papers %}
-    <p>
-        <a href="/paper-details/{{ paper.id }}/">Paper Name : {{ paper.title }}</a>
-    </p>
-    {% endfor %}
-        <form action="/paper-selection/">
-        <button type="submit">Select a Paper to review</button>
-            </form>
+        <p>Request has been sent to PCC for approval. Thank you.</p>
     </div>
 {% endblock %}
