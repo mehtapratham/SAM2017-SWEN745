@@ -65,12 +65,15 @@ def upload_paper(request):
     args={}
     args.update(csrf(request))
     args['form']=form
+    print(request.user.id)
+    args['userid']=request.user.id
     return render_to_response('common/upload-paper.html',args)
 
 @login_required(login_url=SAM_login_url)
 def view_papers(request):
-    papers = Paper.objects.all()
-    context = {'papers': papers}
+    author_id=request.user.id
+    paper_ids = Paper.objects.filter(authors=author_id)
+    context = {'papers': paper_ids}
     return render(request, 'common/view-papers.html', context, context_instance=RequestContext(request))
 
 @login_required(login_url=SAM_login_url)
@@ -78,13 +81,28 @@ def paper_assignment(request):
     token={}
     return render_to_response("common/paper_assignment.html",token)
 
+@login_required(login_url=SAM_login_url)
+def paper_selection(request):
+    token={}
+    paper_list=Paper.objects.exclude(authors=request.user.id)
+    token['paper_list']=paper_list
+    return render_to_response('common/paper_selection.html',token)
 
+@login_required(login_url=SAM_login_url)
+def request_to_review(request,paperId):
+    pcm_user = request.user.id
+    pap = paperId
+    papers_selection.create(pcm_user,pap)
+    return render_to_response('common/paper_selection_success.html')
 
 @login_required(login_url=SAM_login_url)
 def paper_details(request,paperId):
     paper = Paper.objects.get(id=paperId)
     token={}
     token['paper']=paper
+    paper_selec=papers_selection.objects.filter(pcm_id=request.user.id)
+    paper_selec.filter(selected_paper_id=paperId)
+    token['paper_selected']=paper_selec
     return render_to_response('common/paper-details.html',token)
 
 '''
