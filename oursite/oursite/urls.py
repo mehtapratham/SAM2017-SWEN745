@@ -58,4 +58,8 @@ urlpatterns = [
 
     url(r'^deadlines/$', views.view_deadlines, name='view-deadlines'),
     url(r'^update-deadlines/$', views.update_deadlines, name='update-deadlines'),
+    url(r'^sam/admin/accounts/$', views.accounts, name='manage-accounts'),
+    url(r'^deleteuser/(?P<userId>[0-9]+)/$', views.deleteUser, name='delete-user'),
+    url(r'^promoteauthor/(?P<userId>[0-9]+)/$', views.promoteAuthor, name='promote-author'),
+    url(r'^demotepcm/(?P<userId>[0-9]+)/$', views.demotePCM, name='promote-author'),
 ]

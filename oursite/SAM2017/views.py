@@ -21,7 +21,9 @@ from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic.edit import UpdateView
 from SAM2017.forms import *
 from SAM2017.models import *
+import json
 
+from django.http import HttpResponse
 
 SAM_login_url = reverse_lazy("login")
 home_page = reverse_lazy("home")
@@ -354,4 +356,54 @@ def update_deadlines(request):
 
     return render_to_response('common/update_deadlines.html',args, context_instance=RequestContext(request))
 
+
+#Admin-----------------------------------------
+@login_required(login_url=SAM_login_url)
+def accounts(request):
+    authors = SAMUser.objects.filter().exclude(is_admin=1)
+
+    pcc = PCC.objects.all()
+    pcm = PCM.objects.all()
+    admins = SAMUser.objects.filter(is_admin=1)
+
+    for user in pcc:
+        authors = authors.exclude(id = user.id)
+
+    for user in pcm:
+        authors = authors.exclude(id = user.id)
+
+    args = {}
+    args['authors'] = authors
+    args['pcc'] = pcc
+    args['pcm'] = pcm
+    args['admins'] = admins
+    return render_to_response("common/admin_manage_accounts.html", args, context_instance=RequestContext(request) )
+
+
+def deleteUser(request, userId):
+    user = SAMUser.objects.filter(id = userId)
+    user.delete()
+
+    response_data = {}
+    response_data['success'] = 1
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+
+def promoteAuthor(request, userId):
+    user = SAMUser.objects.get(id = userId)
+
+    pcm = PCM(samuser_ptr_id=user.id)
+    pcm.__dict__.update(user.__dict__)
+    pcm.save()
+    response_data = {}
+    response_data['success'] = 1
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+
+def demotePCM(request, userId):
+    user = PCM.objects.get(id = userId)
+    user.delete()
+    response_data = {}
+    response_data['success'] = 1
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
 
