@@ -93,7 +93,7 @@ class Paper(models.Model):
     title = models.CharField(max_length=300)
     description = models.TextField()
     # upload_date = models.DateField(auto_now_add=True)
-    authors = models.CharField(max_length=15)
+    authors = models.ForeignKey(SAMUser)
     file = models.FileField(upload_to=get_upload_file_name)
 
     def __str__(self):

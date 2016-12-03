@@ -19,7 +19,15 @@
                 {% endfor %}
                 </ul>
             </li>
+        {% if user_type  %}
+<p>fbje</p>
+
+            {% else %}
+
             <a class="btn btn-primary" href="review-rate/{{paper.id}}/">Review and Rate Paper</a>
+
+
+            {% endif %}
         </ul>
         
     {% else %}

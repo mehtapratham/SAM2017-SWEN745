@@ -10,13 +10,20 @@
         <p>Feb 2017</p>
 
         <h4>Papers Assigned to review:</h4>
+        {% if papers_assigned  %}
         {% for paper in papers_assigned  %}
-            <a href="/paper-details/{{ paper.id }}/">Paper Title : {{ paper.title }}</a>
+            <a href="/paper-details/{{ paper.selected_paper_id }}/">Paper ID : {{ paper.selected_paper_id }}</a>
     {% endfor %}
+        {% else %}
+        <p>No Papers assigned to review.</p>
+    {% endif %}
     <h4>Papers Reviewed by PCMs:</h4>
         {% for paper in papers_reviewed  %}
            <p> <a href="/paper-details/{{ paper.id }}/">Paper ID : {{ paper.paper_id }}</a>
     </p>{% endfor %}
-    <h4><a href="paper_assignment">Assign Papers to PCMs</a></h4>
+    <h4>Assign Papers to PCMs</h4>
+    {% for paper in paper_selected  %}
+           <p> <a href="/paper-details_pcc/{{ paper.id }}/">Paper ID : {{ paper.selected_paper_id }}</a> </p>
+   {% endfor %}
     </div>
 {% endblock %}

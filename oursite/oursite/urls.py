@@ -45,8 +45,14 @@ urlpatterns = [
     url(r'^paper_assignment/$', views.paper_assignment, name='paper_assignment'),
     url(r'^review-rate/(?P<paperId>\d+)', views.reviewRating, name='review-rate'),
 
+    #PCM functions
     url(r'^paper-selection/$',views.paper_selection,name='paper-selection'),
     url(r'^request_to_review/(?P<paperId>\d+)',views.request_to_review,name='request_to_review'),
+
+    #PCC functions
+    url(r'^paper-details_pcc/(?P<paperId>[0-9]+)/$', views.paper_details_pcc, name='paper-details_pcc'),
+    url(r'^paper-approve/(?P<Id>[0-9]+)/$', views.paper_approve, name='paper-approve'),
+    url(r'^paper-reject/(?P<Id>[0-9]+)/$', views.paper_reject, name='paper-reject'),
 
 	url(r'^notifications/$', views.view_notifications, name='view-notifications'),
 

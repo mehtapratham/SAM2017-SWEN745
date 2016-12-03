@@ -5,20 +5,28 @@
 {% block body %}
 
     <div class="jumbotron">
-        <h2>Welcome PCM to SAM2017 </h2>
         <p>International Conference on Software Architecture Mining</p>
         <p>Feb 2017</p>
         <h4>Paper Details</h4>
         <p>Paper title : {{ paper.title }}</p>
         <p>Paper Description : {{ paper.description }}</p>
     <p>Paper Author : {{ paper.author }}</p>
+        {% if user_type_pcc %}
+
+        {% else %}
         {% if paper_selected %}
             <h4>You have already requested to review this paper. Decision is pending with PCC</h4>
         {% else %}
-            <form action="/request_to_review/{{ paper.id }}" >
-            <button type="submit">Request to Review</button>
-            </form>
-        {% endif %}
-    <p><a href="/review-rate/{{ paper.id }}">Review Paper</a></p>
+            {% if user_id == paper.authors_id%}
+
+
+            {% else %}
+            <button type="submit" onclick="window.location.href='/request_to_review/{{ paper.id }}'">Request to Review</button>
+
+            {% endif %}
+            <p><a href="/review-rate/{{ paper.id }}">Review Paper</a></p>
+    {% endif %}
+    {% endif %}
+
     </div>
 {% endblock %}

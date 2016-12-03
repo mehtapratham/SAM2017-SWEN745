@@ -33,8 +33,9 @@ def index(request):
     token={}
     if(PCC.objects.filter(id = u_id)):
         token['papers'] = Paper.objects.all()
-        token['papers_assigned '] = PCM.objects.all()
+        token['papers_assigned'] = papers_selection.objects.filter(decisions=True)
         token['papers_reviewed'] = ReviewRating.objects.all()
+        token['paper_selected'] = papers_selection.objects.filter(decisions=False)
         return render_to_response('common/pcc_home.html',token)
     elif(PCM.objects.filter(id = u_id)):
         token['papers'] = Paper.objects.all()
@@ -96,13 +97,59 @@ def request_to_review(request,paperId):
 @login_required(login_url=SAM_login_url)
 def paper_details(request,paperId):
     paper = Paper.objects.get(id=paperId)
+    user_type_pcc = PCC.objects.filter(id=request.user.id)
+    user_type_pcm = PCM.objects.filter(id=request.user.id)
     token={}
     token['paper']=paper
-    paper_selec=papers_selection.objects.filter(pcm_id=request.user.id)
-    paper_selec.filter(selected_paper_id=paperId)
-    token['paper_selected']=paper_selec
+    token['user_id']=request.user.id
+    token['user_type_pcc'] = user_type_pcc
+    if user_type_pcc:
+        return render_to_response('common/paper-details.html', token)
+    elif user_type_pcm:
+        paper_selec = papers_selection.objects.filter(pcm_id=request.user.id).filter(selected_paper_id=paperId)
+        token['paper_selected']=paper_selec
     return render_to_response('common/paper-details.html',token)
 
+@login_required(login_url=SAM_login_url)
+def paper_details_pcc(request,paperId):
+    paper = Paper.objects.get(id=paperId)
+    requester = papers_selection.objects.filter(selected_paper_id=paperId).filter(decisions = False)
+    token={}
+    token['paper']=paper
+    token['requesters']=requester
+    paper_selec = papers_selection.objects.filter(pcm_id=request.user.id)
+    paper_selec.filter(selected_paper_id=paperId)
+    token['paper_selected']=paper_selec
+    return render_to_response('common/paper-details_pcc.html',token)
+
+@login_required(login_url=SAM_login_url)
+def paper_approve(request,Id):
+    pap = papers_selection.objects.get(id=Id)
+    paper = Paper.objects.get(id=pap.selected_paper_id)
+    pap.decisions = True
+    pap.save()
+    token={}
+    token['paper']=paper
+    requester = papers_selection.objects.filter(selected_paper_id=pap.selected_paper_id).filter(decisions=False)
+    token['requesters']=requester
+    paper_selec=papers_selection.objects.filter(pcm_id=request.user.id)
+    paper_selec.filter(selected_paper_id=paper.id)
+    token['paper_selected']=paper_selec
+    return render_to_response('common/paper-details_pcc.html',token)
+
+@login_required(login_url=SAM_login_url)
+def paper_reject(request,Id):
+    pap = papers_selection.objects.get(id=Id)
+    paper = Paper.objects.get(id=pap.selected_paper_id)
+    pap.delete()
+    token={}
+    token['paper']=paper
+    requester = papers_selection.objects.filter(selected_paper_id=paper.id).filter(decisions=False)
+    token['requesters']=requester
+    paper_selec=papers_selection.objects.filter(pcm_id=request.user.id)
+    paper_selec.filter(selected_paper_id=paper.id)
+    token['paper_selected']=paper_selec
+    return render_to_response('common/paper-details_pcc.html',token)
 '''
 def download_paper(request,papername):
     paper_name = papername
