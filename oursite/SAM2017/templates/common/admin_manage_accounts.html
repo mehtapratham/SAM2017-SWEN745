@@ -1,0 +1,108 @@
+{% extends 'common/base.html' %}
+{% block title %}SAM2017- Manage accounts{% endblock %}
+{% block navbar_index %}active{% endblock %}
+
+{% block body %}
+<table>
+<tr><td><div class="authors">Authors</div></td></tr>
+    {% for account in authors %}
+    <tr>
+        <td><div class="account-block">{{account.first_name}} {{account.last_name}}</div></td>
+        <td><button class="btn btn-primary promote-author" data-user-id={{account.id}}>Promote to PCM</button></td>
+        <td><button class="btn btn-danger delete-user-btn" data-user-id={{account.id}}><span class="glyphicon glyphicon-trash"></span></button></td>
+    </tr>
+    {% endfor %}
+
+<tr><td><div class="authors">PCC</div></td></tr>
+
+    {% for account in pcc %}
+    <tr>
+        <td><div class="account-block">{{account.first_name}} {{account.last_name}}</div></td>
+        <td></td>
+        <td><button class="btn btn-danger delete-user-btn" data-user-id={{account.id}}><span class="glyphicon glyphicon-trash"></span></button></td>
+    </tr>
+    {% endfor %}
+
+<tr><td><div class="authors">PCM</div></td></tr>
+
+    {% for account in pcm %}
+    <tr>
+        <td><div class="account-block">{{account.first_name}} {{account.last_name}}</div></td>
+        <td><button class="btn btn-warning demote-pcm" data-user-id={{account.id}}>Demote to Author</button></td>
+        <td><button class="btn btn-danger delete-user-btn" data-user-id={{account.id}}><span class="glyphicon glyphicon-trash"></span></button></td>
+    </tr>
+    {% endfor %}
+
+
+<tr><td><div class="authors">Admins</div></td></tr>
+
+    {% for account in admins %}
+    <tr>
+        <td><div class="account-block">{{account.first_name}} {{account.last_name}}</div></td>
+        <td></td>
+        <td><button class="btn btn-danger delete-user-btn" data-user-id={{account.id}}><span class="glyphicon glyphicon-trash"></span></button></td>
+    </tr>
+    {% endfor %}
+</table>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.delete-user-btn').on('click', deleteUser);
+        $('.promote-author').on('click', promoteAuthor);
+        $('.demote-pcm').on('click', demotePCM);
+    });
+
+    function deleteUser(event){
+        var id = $(event.target).data('user-id');
+        $.ajax({
+            url: '/deleteuser/'+id+'/',
+            dataType: 'json',
+            success: function(data){
+                var jsonData = JSON.parse(data);
+                if(jsonData['success'] == 1){
+                    window.location.reload(true);
+                }
+            },
+            error: function (data) {
+            	console.log("delete user error");
+                console.log(data);
+            }
+        });
+    }
+
+    function promoteAuthor(event){
+        var id = $(event.target).data('user-id');
+        $.ajax({
+            url: '/promoteauthor/'+id+'/',
+            dataType: 'json',
+            success: function(data){
+
+                if(data['success'] == 1){
+                    window.location.reload(true);
+                }
+            },
+            error: function (data) {
+            	console.log("delete user error");
+                console.log(data);
+            }
+        });
+    }
+
+    function demotePCM(event){
+        var id = $(event.target).data('user-id');
+        $.ajax({
+            url: '/demotepcm/'+id+'/',
+            dataType: 'json',
+            success: function(data){
+
+                if(data['success'] == 1){
+                    window.location.reload(true);
+                }
+            },
+            error: function (data) {
+            	console.log("delete user error");
+                console.log(data);
+            }
+        });
+    }
+</script>
+{% endblock %}
