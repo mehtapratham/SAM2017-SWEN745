@@ -16,6 +16,13 @@
 .glyphicon{
     pointer-events: none;
 }
+
+.side-nav-links {
+    width: 200px;
+    position: fixed;
+    top: 70px;
+    left: 15px;
+}
 /*
 body {
     background: white url("../images/background.png");

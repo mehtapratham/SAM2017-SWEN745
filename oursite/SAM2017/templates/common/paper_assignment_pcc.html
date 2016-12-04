@@ -10,7 +10,9 @@
         <p>Feb 2017</p>
 
         <h4>Papers Assignment: </h4>
-
+            {% for paper in papers %}
+          <p>  <a href="/paper_selected_to_assign/{{ paper.id }}">Paper Title : {{ paper.title }}</a></p>
+    {% endfor %}
 
     </div>
 {% endblock %}

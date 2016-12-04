@@ -94,6 +94,7 @@ class Paper(models.Model):
     description = models.TextField()
     # upload_date = models.DateField(auto_now_add=True)
     authors = models.ForeignKey(SAMUser)
+    numofreviewers = models.IntegerField(default=0)
     file = models.FileField(upload_to=get_upload_file_name)
 
     def __str__(self):

@@ -37,7 +37,6 @@ def index(request):
         token['papers'] = Paper.objects.all()
         token['papers_assigned'] = papers_selection.objects.filter(decisions=True)
         token['papers_reviewed'] = ReviewRating.objects.all()
-        token['paper_selected'] = papers_selection.objects.filter(decisions=False)
         return render_to_response('common/pcc_home.html',token)
     elif(PCM.objects.filter(id = u_id)):
         token['papers'] = Paper.objects.all()
@@ -78,15 +77,50 @@ def view_papers(request):
     return render(request, 'common/view-papers.html', context, context_instance=RequestContext(request))
 
 @login_required(login_url=SAM_login_url)
-def paper_assignment(request):
+def paper_assignment_pcc(request):
     token={}
-    return render_to_response("common/paper_assignment.html",token)
+    papers = Paper.objects.filter(numofreviewers__lte=2)
+    token['papers'] = papers
+    return render_to_response("common/paper_assignment_pcc.html",token)
 
 @login_required(login_url=SAM_login_url)
-def paper_selection(request):
+def paper_selected_to_assign(request,paperId):
     token={}
-    paper_list=Paper.objects.exclude(authors=request.user.id)
-    token['paper_list']=paper_list
+    reviewers=[]
+    paper = Paper.objects.get(id=paperId)
+    list_of_reviewers = PCM.objects.all().exclude(id=paper.authors_id)
+    for li in list_of_reviewers:
+        abc = papers_selection.objects.filter(selected_paper_id=paperId).filter(pcm_id=li.id).filter(decisions=True)
+        if abc:
+            print('')
+        else:
+            reviewers.append(li)
+    token['paper'] = paper
+    token['reviewers'] = reviewers
+    return render_to_response("common/paper_selected_to_assign.html",token)
+
+@login_required(login_url=SAM_login_url)
+def assigned_reviewer(request, paperId,reviewerId):
+    token={}
+    paper=Paper.objects.get(id=paperId)
+    reviewer=PCM.objects.get(id=reviewerId)
+    new_add = papers_selection.objects.create(decisions=True,selected_paper_id=paperId,pcm_id=reviewerId)
+    paper.numofreviewers = paper.numofreviewers + 1
+    paper.save()
+    return render_to_response("common/assigned_reviewer.html",token)
+
+@login_required(login_url=SAM_login_url)
+def paper_selection_pcm(request):
+    token={}
+    new_paper_list=[]
+    paper_list = Paper.objects.filter(numofreviewers__lte= 2).exclude(authors_id=request.user.id)
+    for paper in paper_list:
+        pap=papers_selection.objects.filter(selected_paper_id=paper.id).filter(pcm_id=request.user.id)
+        if pap:
+            print('')
+        else:
+            new_paper_list.append(paper)
+    token['paper_list']=new_paper_list
     return render_to_response('common/paper_selection.html',token)
 
 @login_required(login_url=SAM_login_url)
@@ -95,6 +129,26 @@ def request_to_review(request,paperId):
     pap = paperId
     papers_selection.create(pcm_user,pap)
     return render_to_response('common/paper_selection_success.html')
+
+@login_required(login_url=SAM_login_url)
+def review_papers_pcm(request):
+    pcm_user = request.user.id
+    list_of_papers = papers_selection.objects.filter(pcm_id=pcm_user).filter(decisions=True)
+    token={}
+    papers=[]
+    for paper in list_of_papers:
+        pap = Paper.objects.get(id=paper.selected_paper_id)
+        papers.append(pap)
+    token['papers'] = papers
+    return render_to_response('common/review_papers_pcm.html',token)
+
+@login_required(login_url=SAM_login_url)
+def selected_to_review_pcm(request,paperId):
+    pap = Paper.objects.get(id=paperId)
+    token={}
+    token['paper']=pap
+    return render_to_response("common/selected_to_review_pcm.html",token)
+
 
 @login_required(login_url=SAM_login_url)
 def paper_details(request,paperId):
@@ -116,6 +170,7 @@ def paper_details(request,paperId):
 def paper_details_pcc(request,paperId):
     paper = Paper.objects.get(id=paperId)
     requester = papers_selection.objects.filter(selected_paper_id=paperId).filter(decisions = False)
+    print(paperId)
     token={}
     token['paper']=paper
     token['requesters']=requester
@@ -125,13 +180,22 @@ def paper_details_pcc(request,paperId):
     return render_to_response('common/paper-details_pcc.html',token)
 
 @login_required(login_url=SAM_login_url)
+def view_requests_pcc(request):
+    token={}
+    token['paper_selected'] = papers_selection.objects.filter(decisions=False)
+    return render_to_response("common/view_requests_pcc.html",token)
+
+@login_required(login_url=SAM_login_url)
 def paper_approve(request,Id):
     pap = papers_selection.objects.get(id=Id)
     paper = Paper.objects.get(id=pap.selected_paper_id)
+    token = {}
+    token['paper'] = paper
+    num_of_reviewers = paper.numofreviewers
+    paper.numofreviewers = num_of_reviewers+1
+    paper.save()
     pap.decisions = True
     pap.save()
-    token={}
-    token['paper']=paper
     requester = papers_selection.objects.filter(selected_paper_id=pap.selected_paper_id).filter(decisions=False)
     token['requesters']=requester
     paper_selec=papers_selection.objects.filter(pcm_id=request.user.id)

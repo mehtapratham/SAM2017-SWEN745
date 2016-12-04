@@ -1,0 +1,18 @@
+{% extends 'common/base.html' %}
+{% block title %}SAM2017 - View Paper Details{% endblock %}
+{% block navbar_view_paper_details %}active{% endblock %}
+
+{% block body %}
+    {% comment %}{% if user.is_authenticated %}{% endcomment %}
+    {% if papers %}
+        <h2>Papers assigned to you for review :</h2>
+        {% for paper in papers %}
+          <p>  <a href="/selected_to_review_pcm/{{ paper.id }}">Paper Title: {{ paper.title }}</a></p>
+
+        {% endfor %}
+
+    {% else %}
+        <p> No paper to review. Kindly request for review.</p>
+    {% endif %}
+
+{% endblock %}

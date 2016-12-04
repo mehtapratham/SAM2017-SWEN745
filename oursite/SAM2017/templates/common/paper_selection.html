@@ -4,11 +4,8 @@
 
 {% block body %}
 
-    <div class="jumbotron">
-        <h2>Welcome PCM to SAM2017 </h2>
-        <p>International Conference on Software Architecture Mining</p>
-        <p>Feb 2017</p>
-        <h4>Select a paper to request for review: </h4>
+    <div>
+        <h2>Select a paper to request for review: </h2>
         {% for paper in paper_list %}
     <p>
         <a href="/paper-details/{{ paper.id }}/">Paper Name : {{ paper.title }}</a>

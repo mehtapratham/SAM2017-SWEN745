@@ -1,0 +1,16 @@
+{% extends 'common/base.html' %}
+{% block title %}SAM2017- Welcome{% endblock %}
+{% block navbar_index %}active{% endblock %}
+
+{% block body %}
+
+    <h3>Paper Reviewer Assigning: </h3>
+    <p>Paper title : {{ paper.title }}    </p>
+    <p>Paper Description : {{ paper.description }}</p>
+    <p>Number of assigned reviewers : {{ paper.numofreviewers }}</p>
+    <br>
+    <p>List of available reviewers:</p>
+        {% for reviewer in reviewers %}
+        <p>Name : {{ reviewer.first_name }} {{ reviewer.last_name }}<a href="/assigned_reviewer/{{ paper.id }}/{{ reviewer.id }}/">Assign</a></p>
+    {% endfor %}
+{% endblock %}

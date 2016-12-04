@@ -1,0 +1,18 @@
+{% extends 'common/base.html' %}
+{% block title %}SAM2017 - View Paper Details{% endblock %}
+{% block navbar_view_paper_details %}active{% endblock %}
+
+{% block body %}
+    {% comment %}{% if user.is_authenticated %}{% endcomment %}
+    <ul class="list-group">
+
+            <li class="list-group-item">
+            <strong>Paper Title : {{ paper.title }}</strong>
+            <p>Paper Description : {{ paper.description }}</p>
+             </li>
+            <button type="button" class="btn btn-primary" onclick="window.location.href='/review-rate/{{paper.id}}/'">Review and Rate Paper</button>
+
+        </ul>
+
+
+{% endblock %}

@@ -42,17 +42,24 @@ urlpatterns = [
     url(r'^upload-paper/$', views.upload_paper, name='upload-paper'),
     url(r'^paper-details/(?P<paperId>[0-9]+)/$', views.paper_details, name='paper-details'),
 
-    url(r'^paper_assignment/$', views.paper_assignment, name='paper_assignment'),
     url(r'^review-rate/(?P<paperId>\d+)', views.reviewRating, name='review-rate'),
 
     #PCM functions
-    url(r'^paper-selection/$',views.paper_selection,name='paper-selection'),
-    url(r'^request_to_review/(?P<paperId>\d+)',views.request_to_review,name='request_to_review'),
+    url(r'^paper_selection_pcm/$',views.paper_selection_pcm,name='paper_selection_pcm'),
+    url(r'^request_to_review/(?P<paperId>\d+)/',views.request_to_review,name='request_to_review'),
+    url(r'^review_papers_pcm/$',views.review_papers_pcm,name='review_papers_pcm'),
+    url(r'^selected_to_review_pcm/(?P<paperId>\d+)/$',views.selected_to_review_pcm,name='selected_to_review_pcm'),
+
+
 
     #PCC functions
     url(r'^paper-details_pcc/(?P<paperId>[0-9]+)/$', views.paper_details_pcc, name='paper-details_pcc'),
     url(r'^paper-approve/(?P<Id>[0-9]+)/$', views.paper_approve, name='paper-approve'),
     url(r'^paper-reject/(?P<Id>[0-9]+)/$', views.paper_reject, name='paper-reject'),
+    url(r'^paper_assignment_pcc/$', views.paper_assignment_pcc, name='paper_assignment_pcc'),
+    url(r'^view_requests_pcc/$', views.view_requests_pcc, name='view_requests_pcc'),
+    url(r'^paper_selected_to_assign/(?P<paperId>[0-9]+)/$', views.paper_selected_to_assign, name='paper_selected_to_assign'),
+    url(r'^assigned_reviewer/(?P<paperId>[0-9]+)/(?P<reviewerId>[0-9]+)/$', views.assigned_reviewer,name='assigned_reviewer'),
 
 	url(r'^notifications/$', views.view_notifications, name='view-notifications'),
 
