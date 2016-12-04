@@ -10,7 +10,7 @@
         <h4>Paper Details</h4>
         <p>Paper title : {{ paper.title }}</p>
         <p>Paper Description : {{ paper.description }}</p>
-    <p>Paper Author : {{ paper.author }}</p>
+    <p>Paper Author : {{ author.first_name }} {{ author.last_name }}</p>
         {% if user_type_pcc %}
 
         {% else %}

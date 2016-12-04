@@ -51,7 +51,7 @@ class SAMUser(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(verbose_name='last name', max_length=30, unique=False, null=True)
     phone_number = models.CharField(verbose_name='phone number', blank=True, max_length=15)
     address = models.CharField(verbose_name='address', max_length=255, null=True, blank=True)
-    #is_admin = models.BooleanField(default=None,blank=True)
+    is_admin = models.BooleanField(default=False,blank=True)
     #is_staff = models.BooleanField(_('staff status'), default=False,help_text=_('Designates whether the user can log into this admin 'site.'))
 
     objects = SAMUserManager()

@@ -15,13 +15,42 @@ from django.template.context import RequestContext
 from django.template.context_processors import request
 from django.template.response import TemplateResponse
 from django.utils.http import is_safe_url
-from django.views.decorators.cache import never_cache
-from django.views.decorators.csrf import csrf_protect
-from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic.edit import UpdateView
 from SAM2017.forms import *
 from SAM2017.models import *
 import json
+
+import functools
+import warnings
+
+from django.conf import settings
+# Avoid shadowing the login() and logout() views below.
+from django.contrib.auth import (
+    REDIRECT_FIELD_NAME, get_user_model, login as auth_login,
+    logout as auth_logout, update_session_auth_hash,
+)
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import (
+    AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm,
+)
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect, QueryDict
+from django.shortcuts import resolve_url
+from django.template.response import TemplateResponse
+from django.utils.deprecation import (
+    RemovedInDjango20Warning, RemovedInDjango110Warning,
+)
+from django.utils.encoding import force_text
+from django.utils.http import is_safe_url, urlsafe_base64_decode
+from django.utils.six.moves.urllib.parse import urlparse, urlunparse
+from django.utils.translation import ugettext as _
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.debug import sensitive_post_parameters
+
+
 
 from django.http import HttpResponse
 
@@ -156,9 +185,11 @@ def paper_details(request,paperId):
     user_type_pcc = PCC.objects.filter(id=request.user.id)
     user_type_pcm = PCM.objects.filter(id=request.user.id)
     token={}
+    author=SAMUser.objects.get(id=paper.authors_id)
     token['paper']=paper
     token['user_id']=request.user.id
     token['user_type_pcc'] = user_type_pcc
+    token['author'] = author
     if user_type_pcc:
         return render_to_response('common/paper-details.html', token)
     elif user_type_pcm:
@@ -338,6 +369,7 @@ def reviewRating(request,paperId):
         form = ReviewRateForm()
 
     token = {}
+    token['paper'] = papers
     token.update(csrf(request))
     token['form'] = form
     return render_to_response('common/review-rate.html',token)
@@ -470,4 +502,3 @@ def demotePCM(request, userId):
     response_data = {}
     response_data['success'] = 1
     return HttpResponse(json.dumps(response_data), content_type="application/json")
-
