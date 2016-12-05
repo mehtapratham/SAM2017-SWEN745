@@ -84,10 +84,10 @@ def upload_paper(request):
         if form.is_valid():
             form.save()
             notification = Notification()
-            #pcc = PCC.objects.get(id=2) - will get PCC when available
-            users = [request.user] # sending notification to author temporarily
+            users = PCC.objects.first()
+            recipient = [users]
             notification.save()
-            notification.sendNotification('NEW_PAPER', users)
+            notification.sendNotification('NEW_PAPER', recipient)
             return HttpResponseRedirect('/papers/')
     else:
         form = PaperForm()
