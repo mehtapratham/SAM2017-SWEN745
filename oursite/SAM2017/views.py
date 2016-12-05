@@ -99,6 +99,19 @@ def upload_paper(request):
     return render_to_response('common/upload-paper.html',args)
 
 @login_required(login_url=SAM_login_url)
+def paper_details_author(request,paperId):
+    paper = Paper.objects.get(id=paperId)
+    token={}
+    reviews=ReviewRating.objects.filter(paper_id=paperId)
+    author=SAMUser.objects.get(id=paper.authors_id)
+    token['pcm']=PCM.objects.all()
+    token['paper']=paper
+    token['user_id']=request.user.id
+    token['author'] = author
+    token['reviews']=reviews
+    return render_to_response('common/paper_details_author.html',token)
+
+@login_required(login_url=SAM_login_url)
 def view_papers(request):
     author_id=request.user.id
     paper_ids = Paper.objects.filter(authors=author_id)
@@ -352,19 +365,16 @@ def reviewRating(request,paperId):
 
         if form.is_valid():
             new = ReviewRating(reviwer_id = user.id,paper_id = papers.id,review = form.cleaned_data["review"],rating = form.cleaned_data["rating"])
-            #reviewer = form.cleaned_data['reviewer']
-           # paper = form.cleaned_data['paper']
-           # review = form.cleaned_data['review']
-            #rating = form.cleaned_data['rating']
-            #is_final = form.cleaned_data['is_final']
-            #form.save()
             new.save()
-            # redirect to home page
-            return render_to_response('common/index.html')
-            #return redirect('https://localhost:8000')
-            # else:
-            # form-data did not validate against form-class rules
-            # form innerhtml now contains any password error messages
+            token = {}
+            author = SAMUser.objects.get(id=papers.authors_id)
+            token['pcm'] = PCM.objects.all()
+            token['paper'] = papers
+            token['user_id'] = request.user.id
+            token['author'] = author
+            token['review'] = new
+            return render_to_response('common/paper_details_pcm.html',token)
+
     else:
         form = ReviewRateForm()
 

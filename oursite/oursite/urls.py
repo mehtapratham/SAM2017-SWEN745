@@ -40,8 +40,10 @@ urlpatterns = [
     url(r'^register/$', sam_views.register, name='register'),
     url(r'^register/success$', sam_views.register_complete, name='register_complete'),
 
+    # AUTHOR
 	url(r'^papers/$', sam_views.view_papers, name='view-papers'),
     url(r'^upload-paper/$', sam_views.upload_paper, name='upload-paper'),
+    url(r'^paper_details_author/(?P<paperId>[0-9]+)/$', sam_views.paper_details_author, name='paper_details_author'),
     url(r'^paper-details/(?P<paperId>[0-9]+)/$', sam_views.paper_details, name='paper-details'),
 
     url(r'^review-rate/(?P<paperId>\d+)', sam_views.reviewRating, name='review-rate'),
