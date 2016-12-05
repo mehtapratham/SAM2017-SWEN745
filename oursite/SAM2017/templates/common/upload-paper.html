@@ -12,7 +12,7 @@
     <div class="container container-fluid">
         <div class ="form-group">
             <label for="title">Title</label>
-            <input class="form-control" id="title" value="{% if form.title.value %}{{form.title.value}}{% endif %}" name="title" type="text"  placeholder="A study of.." required></br>
+            <textarea class="form-control" id="title" value="{% if form.title.value %}{{form.title.value}}{% endif %}" name="title" type="text"  placeholder="A study of.." rows="1" required ></textarea></br>
         </div>
         <div class ="form-group">
             <label for="description">Description</label>

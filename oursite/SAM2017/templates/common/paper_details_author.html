@@ -1,0 +1,37 @@
+{% extends 'common/base.html' %}
+{% block title %}SAM2017- Welcome{% endblock %}
+{% block navbar_index %}active{% endblock %}
+
+{% block body %}
+
+    <div class="container container-fluid">
+
+        <h3>Paper Details</h3>
+        <p>Paper title : {{ paper.title }}</p>
+        <p>Paper Description : {{ paper.description }}</p>
+        <p>Paper Author : {{ author.first_name }} {{ author.last_name }}</p>
+
+        <div>
+            {%if reviews %}
+        <ul class="list-group">
+        {%for review in reviews%}
+            <li class="list-group-item">
+                <div>
+                <h4>Reviewer Name: {% for user in pcm %} {% if user.id == review.reviwer_id %}{{ user.first_name }} {{ user.last_name }}{% endif %}{% endfor %}</h4>
+                <p>Review:</p>
+                <blockquote>{{review.review}}</blockquote>
+                 <p>Rating: {{ review.rating }}</p>
+                </div>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+                <ul class="list-group"><li class="list-group-item">
+        <p>No reviews available yet.</p></li>
+                </ul>
+    {% endif %}
+
+        </div>
+
+    </div>
+{% endblock %}

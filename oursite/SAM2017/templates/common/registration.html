@@ -1,3 +1,33 @@
+{% extends 'common/login_base.html' %}
+{% block title %}SAM2017- Register{% endblock %}
+
+
+{% block body %}
+{% block content %}
+<form action="/register/" class="form-horizontal" method="post">{% csrf_token %}
+
+	<p>
+        {{ form.non_field_errors }}
+        <table>
+            {% for field in form %}
+            <tr>
+                <td>{{ field.label_tag }}</td>
+                <td>{{ field }}</td>
+                <td>{{ field.errors }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </p>
+
+    <p>
+        <input class="btn btn-primary" type="submit" value="Register" />
+    </p>
+
+    <input type="hidden" name="next" value="{{ next }}" />
+</form>
+{% endblock %}
+{% endblock %}
+{% comment %}
 <html>
 <head>
 <title>SAM 2017 Registration</title>
@@ -38,4 +68,6 @@ border: 2px solid #086D00;
 
 {% endblock %}
 </body>
-</html>
+</html>{% endcomment %}
+
+

@@ -30,7 +30,7 @@
         </div>
         <div class="collapse navbar-collapse" id="topNavBar">
             <ul class="nav navbar-nav">
-                {% comment %}{% if user.is_authenticated  %}{% endcomment %}
+               {% comment %} {% if user.is_authenticated  %}{% endcomment %}
                     <li class="{% block navbar_view-papers %}{% endblock %}">
                         <a href="{% url 'SAM2017:view-papers' %}">
                             <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>&nbsp;
@@ -45,43 +45,55 @@
                         </a>
                     </li>
 					
-                {% comment %}{% endif %}{% endcomment %}
+                {% comment %}{% else %}
+                    <li class="{% block navbar_signin %}{% endblock %}">
+                        <a href="{% url 'SAM2017.views.login' %}">
+                            <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;
+                            Signin
+                        </a>
+                    </li>
+                    <li class="{% block navbar_register-user %}{% endblock %}">
+                        <a href="{% url 'SAM2017.views.register' %}">
+                            <span class="glyphicon glyphicon-registration-mark" aria-hidden="true"></span>&nbsp;
+                            Register
+                        </a>
+                    </li>
+            {% endif %}{% endcomment %}
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
                 {% comment %}{% if user.is_authenticated %}{% endcomment %}
 
-                    {% comment %}<li class="">
-                        <a href="{% url 'SAM2017:logout' %}">
-                            <span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp;
-                            Logout
-                        </a>
-                    </li>{% endcomment %}
+
                     <li class="{% block navbar_view-notifications %}{% endblock %}">
                         <a href="{% url 'view-notifications' %}">
                             <span class="glyphicon glyphicon-bell" aria-hidden="true"></span>&nbsp;
                             Notifications
                         </a>
                     </li>
+                <li class="">
+                        <a href="/logout/">
+                            <span class="glyphicon glyphicon-off" aria-hidden="true"></span>&nbsp;
+                            Logout
+                        </a>
+                    </li>
 
-                {% comment %}{% else %}
 
-                {% endif %}{% endcomment %}
             </ul>
+
         </div>
 
     </div>
 </nav>
 
 <div class="container">
-{% block body %}
-{% endblock %}
+    {% block body %}
+    {% endblock %}
 </div>
+
 
 <hr>
 
-<footer>
 
-</footer>
 </body>
 </html>
