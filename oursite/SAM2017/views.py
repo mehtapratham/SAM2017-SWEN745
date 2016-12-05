@@ -45,7 +45,7 @@ from django.utils.deprecation import (
 )
 from django.utils.encoding import force_text
 from django.utils.http import is_safe_url, urlsafe_base64_decode
-from django.utils.six.moves.urllib.parse import urlparse, urlunparse
+# from django.utils.six.moves.urllib.parse import urlparse, urlunparse
 from django.utils.translation import ugettext as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
