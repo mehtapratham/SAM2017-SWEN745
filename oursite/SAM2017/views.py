@@ -260,6 +260,29 @@ def paper_reject(request,Id):
     paper_selec.filter(selected_paper_id=paper.id)
     token['paper_selected']=paper_selec
     return render_to_response('common/paper-details_pcc.html',token)
+
+@login_required(login_url=SAM_login_url)
+def promote_to_pcm(request):
+    allusers=SAMUser.objects.all().exclude(id=request.user.id)
+    authors=[]
+    for user in allusers:
+        check_pcm=PCM.objects.filter(id=user.id)
+        if check_pcm:
+            print('')
+        else:
+            authors.append(user)
+    token={}
+    token['authors']=authors
+    return render_to_response("common/promote_to_pcm.html",token)
+
+@login_required(login_url=SAM_login_url)
+def promote_author(request,uid):
+    user = SAMUser.objects.get(id=uid)
+    pcm = PCM(samuser_ptr_id=user.id)
+    pcm.__dict__.update(user.__dict__)
+    pcm.save()
+    return redirect(resolve_url('promote_to_pcm'))
+
 '''
 def download_paper(request,papername):
     paper_name = papername

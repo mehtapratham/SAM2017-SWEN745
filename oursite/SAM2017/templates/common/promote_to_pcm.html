@@ -1,0 +1,23 @@
+{% extends 'common/base.html' %}
+{% block title %}SAM2017-View Papers{% endblock %}
+{% block navbar_view-papers %}active{% endblock %}
+
+{% block body %}
+<div class="container container-fluid">
+    {%if authors %}
+        <ul class="list-group">
+        {%for author in authors%}
+            <li class="list-group-item">
+                <div>
+                <h2>Author Name: {{ author.first_name }} {{ author.last_name }}</h2>
+                <blockquote>Contact: {{ author.phone_number }}</blockquote>
+                    <button type="button"  class="btn btn-primary"onclick="window.location.href='/promote_author/{{author.id}}/'">Promote</button>
+                </div>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No Authors Available to Promote! </p>
+    {% endif %}
+</div>
+{% endblock %}

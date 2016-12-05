@@ -64,6 +64,8 @@ urlpatterns = [
     url(r'^view_requests_pcc/$', sam_views.view_requests_pcc, name='view_requests_pcc'),
     url(r'^paper_selected_to_assign/(?P<paperId>[0-9]+)/$', sam_views.paper_selected_to_assign, name='paper_selected_to_assign'),
     url(r'^assigned_reviewer/(?P<paperId>[0-9]+)/(?P<reviewerId>[0-9]+)/$', sam_views.assigned_reviewer,name='assigned_reviewer'),
+    url(r'^promote_to_pcm/$', sam_views.promote_to_pcm, name='promote_to_pcm'),
+    url(r'^promote_author/(?P<uid>[0-9]+)/$', sam_views.promote_author, name='promote_author'),
 
 	url(r'^notifications/$', sam_views.view_notifications, name='view-notifications'),
 
