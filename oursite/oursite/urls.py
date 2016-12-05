@@ -38,10 +38,10 @@ urlpatterns = [
     url(r'^register/$', views.register, name='register'),
     url(r'^register/success$', views.register_complete, name='register_complete'),
 
-	url(r'^papers/$', views.view_papers, name='view-papers'),
+    url(r'^papers/$', views.view_papers, name='view-papers'),
     url(r'^upload-paper/$', views.upload_paper, name='upload-paper'),
-    url(r'^paper-details/(?P<paperId>[0-9]+)/$', views.paper_details, name='paper-details'),
-
+    url(r'^papers/paper-details/(?P<paperId>[0-9]+)/$', views.paper_details, name='paper-details'),
+    url(r'^papers/paper-uploads/uploaded_files/', views.download_paper, name='download-paper'),
     url(r'^review-rate/(?P<paperId>\d+)', views.reviewRating, name='review-rate'),
 
     #PCM functions

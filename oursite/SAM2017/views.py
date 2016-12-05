@@ -22,6 +22,7 @@ from django.views.generic.edit import UpdateView
 from SAM2017.forms import *
 from SAM2017.models import *
 import json
+from django.utils.encoding import smart_str
 
 from django.http import HttpResponse
 
@@ -48,7 +49,7 @@ def pcc_home(request):
     id=request.user.id
     return render_to_response('common/pcc_home.html')
 
-@login_required(login_url=SAM_login_url)	
+@login_required(login_url=SAM_login_url)
 def upload_paper(request):
     if request.POST:
         form = PaperForm(request.POST,request.FILES)
@@ -166,6 +167,14 @@ def paper_details(request,paperId):
         token['paper_selected']=paper_selec
     return render_to_response('common/paper-details.html',token)
 
+
+def download_paper(request):
+    response = HttpResponse(content_type='application/pdf') # mimetype is replaced by content_type for django 1.7
+    response['Content-Disposition'] = 'attachment; filename=%s' % smart_str(request.path)
+    response['X-Sendfile'] = smart_str(request.path)
+    return response
+
+
 @login_required(login_url=SAM_login_url)
 def paper_details_pcc(request,paperId):
     paper = Paper.objects.get(id=paperId)
@@ -250,19 +259,19 @@ def register(request):
     token.update(csrf(request))
     token['form'] = form
 
-    return render_to_response('common/registration.html', token)	
-	
+    return render_to_response('common/registration.html', token)
+
 def register_complete(request):
     return render_to_response("common/registration_success.html")
-	
-	
-	
-	
+
+
+
+
 # LOGIN -----------------------------------------------------------------------------
 @deprecate_current_app
 @sensitive_post_parameters()
 @csrf_protect
-@never_cache	
+@never_cache
 def login(request, template_name='common/login.html',
           redirect_field_name=REDIRECT_FIELD_NAME,
           authentication_form=AuthenticationForm,
@@ -286,7 +295,7 @@ def login(request, template_name='common/login.html',
 
             """
             Added following if condition to manipulate
-           
+
             if form.get_user().is_admin:
                 redirect_to = "/admin/login/"
 			"""
@@ -367,30 +376,41 @@ def update_deadlines(request):
             deadline_1 = Deadline.objects.get(deadline_type='PSD')
             deadline_1.deadline_date = selectedPSDDeadline
             deadline_1.save()
-            # notification = Notification()
-            # recipients = [SAMUser]
-            # notification.sendNotification("Paper_Submission_Deadline", psd_deadline.id, recipients)
+            notification = Notification()
 
+            allusers = SAMUser.objects.all().exclude(is_admin=1)
+            pcc = PCC.objects.all()
+            for user in pcc:
+                allusers = allusers.exclude(id=user.id)
 
+            recipients = allusers
+            notification.sendNotification("Paper_Submission_Deadline", deadline_1.id, recipients)
 
         selectedRCDDeadline = (request.POST.get('rcdDeadlineId'))
         if selectedRCDDeadline is not None:
             deadline_2 = Deadline.objects.get(deadline_type='RCD')
             deadline_2.deadline_date = selectedRCDDeadline
             deadline_2.save()
-            # notification = Notification()
-            # recipients = [SAMUser]
-            # notification.sendNotification("Review_Choice_Deadline", rcd_deadline.id, recipients)
+            notification = Notification()
 
+            pcm = PCM.objects.all()
+
+            recipients = pcm
+
+            notification.sendNotification("Review_Choice_Deadline", deadline_2.id, recipients)
 
         selectedRSDDeadline = (request.POST.get('rsdDeadlineId'))
         if selectedRSDDeadline is not None:
             deadline_3 = Deadline.objects.get(deadline_type='RSD')
             deadline_3.deadline_date = selectedRSDDeadline
             deadline_3.save()
-            # notification = Notification()
-            # recipients = [SAMUser]
-            # notification.sendNotification("Review_Submission_Deadline", rcd_deadline.id, recipients)
+            notification = Notification()
+
+            pcm = PCM.objects.all()
+
+            recipients = pcm
+
+            notification.sendNotification("Review_Submission_Deadline", deadline_3.id, recipients)
 
 
         selectedANDDeadline = (request.POST.get('andDeadlineId'))
@@ -404,11 +424,9 @@ def update_deadlines(request):
 
         return HttpResponseRedirect('/deadlines/')
     else:
-
-
         deadline_1 = get_object_or_404(Deadline,deadline_type='PSD')
         deadline_2 = get_object_or_404(Deadline,deadline_type='RCD')
-        deadline_3 =get_object_or_404(Deadline,deadline_type='RSD')
+        deadline_3 = get_object_or_404(Deadline,deadline_type='RSD')
         deadline_4 = get_object_or_404(Deadline,deadline_type='AND')
 
         args={}
