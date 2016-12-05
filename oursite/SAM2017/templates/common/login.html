@@ -1,7 +1,7 @@
-<html>
-<head>
-<title>SAM 2017</title>
-</head>
+{% extends 'common/login_base.html' %}
+{% block title %}SAM2017- Login{% endblock %}
+
+
 <style>
 #divbox{
 margin-top:200px;
@@ -11,29 +11,20 @@ background-color:#EFFBF5;
 border: 2px solid #086D00;
 }
 </style>
-<body>
+{% block body %}
 {% block content %}
 		{% if form.errors %}
-
-	<p>Your username and password didn't match. Please try again.</p>
-	{% endif %}
+	        <p>Your username and password didn't match. Please try again.</p>
+	    {% endif %}
 
 	{% if next %}
 		{% if user.is_authenticated %}
 			<p>Your account doesn't have access to this page. To proceed, please login with an account that has access.</p>
-		{% comment "Removed from R1" %}
 		{% else %}
 			<p>Please login to see this page.</p>
-		{% endcomment %}
 		{% endif %}
 	{% endif %}
-			   <div id="divbox">
-					<div>
-						<h3>Please Sign In</h3>
-					</div>
-					<div>
-						<form method="post" action="{% url 'SAM2017.views.login' %}">
-	{% csrf_token %}
+	    <form method="post" class= "form-horizontal" action="{% url 'SAM2017.views.login' %}">	{% csrf_token %}
 
 							<p>
 								<table>
@@ -49,24 +40,24 @@ border: 2px solid #086D00;
 							</p>
 								<p>
 									<input type="submit" value="login" class="myButton" />
-									<a class="myButton" href="../register">Register</a>
+									<button class="myButton" onclick="window.location.href='../register'">Register</button>
 								</p>
+                           {% comment %}  <div class="container container-fluid">
+                                    <div class ="form-group">
+                                        <label for="email">Email</label>
+                                        <input class="form-control" id="email" value="{{ form.username.value | default:'' }}" name="title" class="form-control input-md" type="text"  required></br>
+                                    </div>
+                                    <div class ="form-group">
+                                        <label for="password">Password</label>
+                                        <input class="form-control" id="password" value="{{ form.password.value }}" type="text" class="form-control input-md" required ></br>
+                                    </div>
+
+                                    <button id="submit" name="submit" class="btn btn-primary">Login </button>
+                                    <button id="cancel" name="cancel" class="btn btn-success" onclick="window.location.href='/SAM2017/register/'">Register</button>
+                                </div>{% endcomment %}
 							<input type="hidden" name="next" value="{{ next }}" />
 						</form>
-						
-						
-					</div>
-				</div>
 
 	{% endblock %}
-	{% block javascript %}
 
-
-	<script>
-	{% if not user.is_authenticated %}
-	{% endif %}
-	</script>
-
-	{% endblock %}
-</body>
-</html>
+{% endblock %}
