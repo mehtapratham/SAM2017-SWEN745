@@ -24,7 +24,6 @@ from django.utils.encoding import smart_str
 import functools
 import warnings
 
-from django.conf import settings
 # Avoid shadowing the login() and logout() views below.
 from django.contrib.auth import (
     REDIRECT_FIELD_NAME, get_user_model, login as auth_login,
@@ -61,6 +60,9 @@ home_page = reverse_lazy("home")
 #index page, i.e. Homepage after log-in
 @login_required(login_url=SAM_login_url)
 def index(request):
+    if request.user.is_admin:
+        return HttpResponseRedirect('/sam/admin/accounts/')
+
     u_id=request.user.id
     token={}
     if(PCC.objects.filter(id = u_id)):
@@ -72,6 +74,7 @@ def index(request):
         token['papers'] = Paper.objects.all()
         return render_to_response('common/pcm_home.html',token)
     return render_to_response('common/index.html')
+
 
 @login_required(login_url=SAM_login_url)
 def pcc_home(request):
@@ -98,6 +101,12 @@ def upload_paper(request):
     print(request.user.id)
     args['userid']=request.user.id
     return render_to_response('common/upload-paper.html',args)
+
+
+# @login_required(login_url=SAM_login_url)
+# def upload_another_version(request,paperId):
+#     paper = Paper.objects.get(id=paperId)
+
 
 @login_required(login_url=SAM_login_url)
 def paper_details_author(request,paperId):
@@ -212,10 +221,11 @@ def paper_details(request,paperId):
     return render_to_response('common/paper-details.html',token)
 
 
-def download_paper(request):
-    response = HttpResponse(content_type='application/pdf') # mimetype is replaced by content_type for django 1.7
-    response['Content-Disposition'] = 'attachment; filename=%s' % smart_str(request.path)
-    response['X-Sendfile'] = smart_str(request.path)
+def download_paper(request, papername):
+    paper = open(settings.MEDIA_ROOT +'/uploaded_files/' + papername, 'rb').read()
+    response = HttpResponse(paper, content_type='application/pdf')
+    response['Content-Disposition'] = 'filename=%s' % smart_str(papername)
+    # response['X-Sendfile'] = smart_str(settings.MEDIA_ROOT +'/uploaded_files/' + papername)
     return response
 
 
