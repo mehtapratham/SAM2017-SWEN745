@@ -103,9 +103,29 @@ def upload_paper(request):
     return render_to_response('common/upload-paper.html',args)
 
 
-# @login_required(login_url=SAM_login_url)
-# def upload_another_version(request,paperId):
-#     paper = Paper.objects.get(id=paperId)
+@login_required(login_url=SAM_login_url)
+def upload_another_version(request, paperId):
+    paper = Paper.objects.get(id=paperId)
+    if request.POST:
+        form = VersionForm(request.POST,request.FILES)
+        if form.is_valid():
+            paper.file = form.cleaned_data['file']
+            paper.version += 1
+            paper.save()
+            notification = Notification()
+            users = PCC.objects.first()
+            recipient = [users]
+            notification.save()
+            notification.sendNotification('NEW_PAPER', recipient)
+            return HttpResponseRedirect('/papers/')
+    else:
+        form = VersionForm()
+    args={}
+    args.update(csrf(request))
+    args['form']=form
+    print(request.user.id)
+    args['userid']=request.user.id
+    return render_to_response('common/upload_version.html',args)
 
 
 @login_required(login_url=SAM_login_url)

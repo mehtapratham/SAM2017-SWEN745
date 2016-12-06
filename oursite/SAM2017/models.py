@@ -96,6 +96,7 @@ class Paper(models.Model):
     authors = models.ForeignKey(SAMUser)
     numofreviewers = models.IntegerField(default=0)
     file = models.FileField(upload_to=get_upload_file_name)
+    version = models.IntegerField(default=1)
 
     def __str__(self):
         return self.title
