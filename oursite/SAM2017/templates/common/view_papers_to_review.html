@@ -1,0 +1,38 @@
+{% extends 'common/base_pcc.html' %}
+{% block title %}SAM2017- Welcome{% endblock %}
+{% block navbar_index %}active{% endblock %}
+
+{% block body %}
+    <h3>Papers available for final review: </h3>
+
+
+    <div class="container container-fluid">
+    {%if pcc_to_review %}
+        <ul class="list-group">
+        {%for paper in pcc_to_review%}
+            <li class="list-group-item">
+                <div>
+                <h2>Paper Title: {{paper.title}}</a></h2>
+
+                <blockquote>{{paper.description}}</blockquote>
+
+                <form method="get" action="paper_review_pcc/{{ paper.id }}">
+                    <button  class="btn btn-primary" type="submit">Final Review</button>
+                </form>
+                </div>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No paper is available for final review yet. </p>
+    {% endif %}
+</div>
+     {% block side_nav %}
+<div >
+    <a href="/paper_assignment_pcc/" class="list-group-item active" id="link_mbr">Assign Papers to Review</a>
+    <a href="/view_requests_pcc/" class="list-group-item" id="link_stat">PCM Review Requests</a>
+    <a href="/promote_to_pcm/" class="list-group-item" id="link_promote">Promote Authors to PCM</a>
+<a href="/view_papers_to_review/" class="list-group-item" id="link_reiew">Review Rate Papers</a>
+</div>
+{% endblock %}
+{% endblock %}

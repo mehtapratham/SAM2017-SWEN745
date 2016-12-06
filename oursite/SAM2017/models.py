@@ -106,7 +106,7 @@ class ReviewRating(models.Model):
     paper = models.ForeignKey(Paper,null=False,blank=False,default=False)
     review = models.TextField()
     rating = models.IntegerField()
-    is_Final = models.BooleanField(default=True)
+    is_Final = models.BooleanField(default=False)
 
     def __str__(self):
         return self.review
