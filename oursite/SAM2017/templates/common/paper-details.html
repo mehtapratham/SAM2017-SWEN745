@@ -7,25 +7,21 @@
     <div class="jumbotron">
         <p>International Conference on Software Architecture Mining</p>
         <p>Feb 2017</p>
-        <h4>Paper Details</h4>
-        <p>Paper title : {{ paper.title }}</p>
-        <p>Paper Description : {{ paper.description }}</p>
-    <p>Paper Author : {{ author.first_name }} {{ author.last_name }}</p>
-        {% if user_type_pcc %}
+    </div>
+    <legend>Paper Details</legend>
+    <p><strong>Paper title</strong> : {{ paper.title }}</p>
+    <p><strong>Paper Description</strong> : {{ paper.description }}</p>
+    <p><strong>Paper Author</strong> : {{ author.first_name }} {{ author.last_name }}</p>
+    {% if user_type_pcc %}
 
-        {% else %}
+    {% else %}
         {% if paper_selected %}
             <h4>You have already requested to review this paper. Decision is pending with PCC</h4>
         {% else %}
             {% if user_id == paper.authors_id%}
-
-
             {% else %}
-            <button type="submit" onclick="window.location.href='/request_to_review/{{ paper.id }}'">Request to Review</button>
-
+                <button type="submit" class="btn btn-primary" onclick="window.location.href='/request_to_review/{{ paper.id }}'">Request to Review</button>
             {% endif %}
+        {% endif %}
     {% endif %}
-    {% endif %}
-
-    </div>
 {% endblock %}

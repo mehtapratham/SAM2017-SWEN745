@@ -1,23 +1,51 @@
 {% extends 'common/base.html' %}
-{% block title %}SAM2017-View Papers{% endblock %}
+{% block title %}SAM2017-Review Papers{% endblock %}
 {% block navbar_view-papers %}active{% endblock %}
 
 {% block body %}
 <div class="container container-fluid">
-                 <form method="post" action="/review-rate/{{paper.id}}/" >{% csrf_token %}
-                     
-                     <table>
+
+    <form method="post" class="form-horizontal" action="/review-rate/{{paper.id}}/">{% csrf_token %}
+
+        <div class="form-group">
+            <label for="id_review">Review:</label>
+            <textarea cols="20" id="id_review" name="review" rows="3"></textarea>
+            <span>{{ id_review.errors }}</span>
+        </div>
+
+        <div class="form-group">
+            <label for="id_rating">Rating:</label>
+            <input id="id_rating" name="rating" type="number">
+            <span>{{ id_rating.errors }}</span>
+        </div>
+
+
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit">Review and Rate</button>
+            <button class="btn btn-default" type="button" onclick="window.location.href='/paper-details/{{ paper.id }}/'">Cancel</button>
+        </div>
+
+    </form>
+
+
+    {% comment %}<form method="post" class="form-horizontal" action="/review-rate/{{paper.id}}/" >{% csrf_token %}
+
+
             {% for field in form %}
-            <tr>
+                <tr>
                 <td>{{ field.label_tag }}</td>
                 <td>{{ field }}</td>
                 <td>{{ field.errors }}</td>
             </tr>
+
             {% endfor %}
-        </table>
-                    <button  class="btn btn-primary" type="submit" >Review and Rate</button>
-                    <button  class="btn btn-primary" type="button" onclick="window.location.href='/paper-details/{{ paper.id }}/'" >Cancel</button>
-                </form>
+
+        <div class ="form-group">
+            <button  class="btn btn-primary" type="submit" >Review and Rate</button>
+            <button  class="btn btn-default" type="button" onclick="window.location.href='/paper-details/{{ paper.id }}/'" >Cancel</button>
+        </div>
+
+    </form>{% endcomment %}
 
         
 </div>
