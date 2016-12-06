@@ -11,7 +11,7 @@
             <strong>{{ notification.title }}</strong>
             <h5>{{ notification.message }}</h5>
             </li>
-        {% endfor %}
+        {% endfor %}<button type="button" onclick="window.location.href='/delete_notifications/'">Delete Notifications</button>
         </ul>
     {% else %}
         <p> You have no notifications</p>

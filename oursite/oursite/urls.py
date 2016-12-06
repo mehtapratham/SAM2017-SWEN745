@@ -76,6 +76,8 @@ urlpatterns = [
 
 
     url(r'^notifications/$', sam_views.view_notifications, name='view-notifications'),
+    url(r'^delete_notifications/$', sam_views.delete_notifications, name='delete_notifications'),
+    url(r'^delete_notifications_pcc/$', sam_views.delete_notifications_pcc, name='delete_notifications_pcc'),
     url(r'^deadlines/$', sam_views.view_deadlines, name='view-deadlines'),
     url(r'^update-deadlines/$', sam_views.update_deadlines, name='update-deadlines'),
     url(r'^sam/admin/accounts/$', sam_views.accounts, name='manage-accounts'),

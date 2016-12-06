@@ -21,7 +21,7 @@
             <h5>{{ notification.message }}</h5>
             </li>
         {% endfor %}
-        </ul>
+        <button type="button" onclick="window.location.href='/delete_notifications_pcc/'">Delete Notifications</button>     </ul>
     {% else %}
         <p> You have no notifications</p>
     {% endif %}

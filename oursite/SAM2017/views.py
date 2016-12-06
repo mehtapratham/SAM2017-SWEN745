@@ -497,6 +497,20 @@ def view_notifications(request):
     return render(request,'common/view-notifications.html',{'notifications':notifications})
 
 @login_required(login_url=SAM_login_url)
+def delete_notifications(request):
+    notifications = Notification.objects.filter(recipients=request.user)
+    for noti in notifications:
+        noti.delete()
+    return HttpResponseRedirect(resolve_url('/notifications/', {'notifications': notifications}))
+
+@login_required(login_url=SAM_login_url)
+def delete_notifications_pcc(request):
+    notifications = Notification.objects.filter(recipients=request.user)
+    for noti in notifications:
+        noti.delete()
+    return HttpResponseRedirect(resolve_url('/notifications_pcc/', {'notifications': notifications}))
+
+@login_required(login_url=SAM_login_url)
 def view_notifications_pcc(request):
     notifications = Notification.objects.filter(recipients = request.user)
     return render(request,'common/notifications_pcc.html',{'notifications':notifications})
