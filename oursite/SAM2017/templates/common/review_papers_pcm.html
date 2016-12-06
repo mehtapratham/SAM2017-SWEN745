@@ -1,18 +1,25 @@
-{% extends 'common/base.html' %}
+{% extends 'common/base_pcm.html' %}
 {% block title %}SAM2017 - View Paper Details{% endblock %}
 {% block navbar_view_paper_details %}active{% endblock %}
 
 {% block body %}
-    {% comment %}{% if user.is_authenticated %}{% endcomment %}
+  {% block side_nav %}
+<nav class="sidenavpcc" style="width:12%;position: absolute">
+   <a href="/selected_to_review_pcm/" class="list-group-item active" id="link_mbr">Review Papers</a>
+    <a href="/paper_selection_pcm/" class="list-group-item" id="link_stat">Select Paper to Review</a>
+</nav>
+{% endblock %}
+    {% block maincontent %}
+        <div class="container" style="margin-left: 15%;">
     {% if papers %}
         <h2>Papers assigned to you for review :</h2>
         {% for paper in papers %}
-          <p>  <a href="/selected_to_review_pcm/{{ paper.id }}">Paper Title: {{ paper.title }}</a></p>
+          <p>  <a href="/selected_to_review_pcm/">Paper Title: {{ paper.title }}</a></p>
 
         {% endfor %}
 
     {% else %}
         <p> No paper to review. Kindly request for review.</p>
     {% endif %}
-
+</div>{% endblock %}
 {% endblock %}

@@ -54,9 +54,8 @@ urlpatterns = [
     #PCM functions
     url(r'^paper_selection_pcm/$',sam_views.paper_selection_pcm,name='paper_selection_pcm'),
     url(r'^request_to_review/(?P<paperId>\d+)/',sam_views.request_to_review,name='request_to_review'),
-    url(r'^review_papers_pcm/$',sam_views.review_papers_pcm,name='review_papers_pcm'),
-    url(r'^selected_to_review_pcm/(?P<paperId>\d+)/$',sam_views.selected_to_review_pcm,name='selected_to_review_pcm'),
-
+    url(r'^selected_to_review_pcm/$',sam_views.selected_to_review_pcm,name='selected_to_review_pcm'),
+    url(r'^view_notifications_pcm/$', sam_views.view_notifications_pcm, name='view_notifications_pcm'),
 
 
     #PCC functions

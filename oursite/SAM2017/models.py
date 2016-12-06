@@ -132,6 +132,7 @@ class papers_selection(models.Model):
         selection.save()
         return selection
 
+
 class Notification(models.Model):
     title = models.CharField(max_length=500, verbose_name=u"Title")
     message = models.TextField(verbose_name=u"Message")
@@ -142,21 +143,46 @@ class Notification(models.Model):
     def __str__(self):
         return self.title + '' + self.message
 
-    notification_message_mapper =  {
-        'NEW_PAPER': {'title':'New Paper','message':'A new paper has been uploaded.'},
-        'SUB_FORMAT_ERROR':{'title':'Submission Format Error','message':'Submission Format Error'},
-        'PAPER_ASSIGNED':{'title':'Paper Assigned','message':'A Paper has been assigned to you.'},
+    notification_message_mapper = {
+        'NEW_PAPER': {'title': 'New Paper', 'message': 'A new paper has been uploaded.'},
+        'SUB_FORMAT_ERROR': {'title': 'Submission Format Error', 'message': 'Submission Format Error'},
+        'PAPER_ASSIGNED': {'title': 'Paper Assigned', 'message': 'A Paper has been assigned to you.'},
         'REVIEW_REQUESTED': {'title': 'Review Requested', 'message': 'A PCM has sent you request to review a paper.'},
-        'ASSIGN_PAPER':{'title':'Assignment Pending','message':'There are few papers that are yet to be assigned to committee members. Please review these.'},
-        'REVIEW_PAPER':{'title':'Review Pending','message':'A paper assigned to you is pending review.'},
-        'FINAL_REVIEW_REQ':{'title':'Provide Final Rating','message':'Reviews from the PCMs are in. Please provide a final review and rating.'},
-        'REVIEW_RESULTS':{'title':'Your paper has been reviewed','message':'The review results for a paper you submitted are in.'}
+        'ASSIGN_PAPER': {'title': 'Assignment Pending',
+                         'message': 'There are few papers that are yet to be assigned to committee members. Please review these.'},
+        'REVIEW_PAPER': {'title': 'Review Pending', 'message': 'A paper assigned to you is pending review.'},
+        'FINAL_REVIEW_REQ': {'title': 'Provide Final Rating',
+                             'message': 'Reviews from the PCMs are in. Please provide a final review and rating.'},
+        'REVIEW_RESULTS': {'title': 'Your paper has been reviewed',
+                           'message': 'The review results for a paper you submitted are in.'},
+        'PAPER_SUBMISSION_DEADLINE': {'title': 'Paper Submission Deadline Changed',
+                                      'message': 'You now need to upload your paper on date'},
+        'REVIEW_CHOICE_DEADLINE': {'title': 'Review Choice Deadline Changed',
+                                   'message': 'You now need to select papers to review by date'},
+        'REVIEW_SUBMISSION_DEADLINE': {'title': 'Review Submission Deadline Changed',
+                                       'message': 'You now need to submit reviews for assigned papers by date'},
+        'AUTHOR_NOTIFICATION_DEADLINE': {'title': 'Author Notification Deadline Changed',
+                                         'message': 'You now need to submit final reviews by date'}
+
     }
 
-    def sendNotification(self, type, recipients):
+    def _construct_notification_msg(self, message, args):
+        if 'date' in args:
+            print(message)
+            print(args['date'])
+
+            custom_message = message.replace('date', args['date'])
+
+            return custom_message
+
+    def sendNotification(self, type, recipients, args=None):
         notification = self
         notification.title = self.notification_message_mapper[type]['title']
-        notification.message = self.notification_message_mapper[type]['message']
+        if args is not None:
+            message = self.notification_message_mapper[type]['message']
+            notification.message = self._construct_notification_msg(message, args)
+        else:
+            notification.message = self.notification_message_mapper[type]['message']
         notification.save()
         notification.recipients.set(recipients)
         print("In here - Saving notifications")

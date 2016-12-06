@@ -81,6 +81,7 @@ def index(request):
 def pcc_home(request):
     id=request.user.id
     return render_to_response('common/pcc_home.html')
+
 @login_required(login_url=SAM_login_url)
 def view_papers_to_review(request):
     token={}
@@ -245,6 +246,8 @@ def assigned_reviewer(request, paperId,reviewerId):
 def paper_selection_pcm(request):
     token={}
     new_paper_list=[]
+    token['user_id'] = request.user.id
+    token['samuser']=SAMUser.objects.all();
     paper_list = Paper.objects.filter(numofreviewers__lte= 2).exclude(authors_id=request.user.id)
     for paper in paper_list:
         pap=papers_selection.objects.filter(selected_paper_id=paper.id).filter(pcm_id=request.user.id)
@@ -268,11 +271,14 @@ def request_to_review(request,paperId):
     return render_to_response('common/paper_selection_success.html')
 
 @login_required(login_url=SAM_login_url)
-def review_papers_pcm(request):
+def selected_to_review_pcm(request):
+    """pap = Paper.objects.get(id=paperId)
+    token={}
+    token['paper']=pap"""
     pcm_user = request.user.id
     list_of_papers = papers_selection.objects.filter(pcm_id=pcm_user).filter(decisions=True)
-    token={}
-    papers=[]
+    token = {}
+    papers = []
     for paper in list_of_papers:
         review_rate = ReviewRating.objects.filter(reviwer_id=pcm_user).filter(paper_id=paper.selected_paper_id)
         if review_rate:
@@ -281,13 +287,6 @@ def review_papers_pcm(request):
             pap = Paper.objects.get(id=paper.selected_paper_id)
             papers.append(pap)
     token['papers'] = papers
-    return render_to_response('common/review_papers_pcm.html',token)
-
-@login_required(login_url=SAM_login_url)
-def selected_to_review_pcm(request,paperId):
-    pap = Paper.objects.get(id=paperId)
-    token={}
-    token['paper']=pap
     return render_to_response("common/selected_to_review_pcm.html",token)
 
 
@@ -516,6 +515,18 @@ def view_notifications_pcc(request):
     return render(request,'common/notifications_pcc.html',{'notifications':notifications})
 
 @login_required(login_url=SAM_login_url)
+def view_notifications_pcm(request):
+    notifications = Notification.objects.filter(recipients = request.user)
+    return render(request,'common/notifications_pcm.html',{'notifications':notifications})
+
+@login_required(login_url=SAM_login_url)
+def delete_notifications_pcm(request):
+    notifications = Notification.objects.filter(recipients=request.user)
+    for noti in notifications:
+        noti.delete()
+    return HttpResponseRedirect(resolve_url('/notifications_pcm/', {'notifications': notifications}))
+
+@login_required(login_url=SAM_login_url)
 def reviewRating(request,paperId):
     papers = Paper.objects.get(id=paperId)
     user = request.user
@@ -557,6 +568,7 @@ def view_paper_details(request,paperId):
     context = {'paper' : paper}
     return render(request,"common/view-paper-detail.html",context)
 
+@login_required(login_url=SAM_login_url)
 def view_deadlines(request):
     deadlines = Deadline.objects.all()
     deadline_dict={ 'PSD': "Paper Submission Deadline",
@@ -585,7 +597,7 @@ def update_deadlines(request):
                 allusers = allusers.exclude(id=user.id)
 
             recipients = allusers
-            notification.sendNotification("Paper_Submission_Deadline", deadline_1.id, recipients)
+            notification.sendNotification("PAPER_SUBMISSION_DEADLINE", recipients, {'date': deadline_1.deadline_date})
 
         selectedRCDDeadline = (request.POST.get('rcdDeadlineId'))
         if selectedRCDDeadline is not None:
@@ -598,7 +610,7 @@ def update_deadlines(request):
 
             recipients = pcm
 
-            notification.sendNotification("Review_Choice_Deadline", deadline_2.id, recipients)
+            notification.sendNotification("REVIEW_CHOICE_DEADLINE", recipients, {'date': deadline_2.deadline_date})
 
         selectedRSDDeadline = (request.POST.get('rsdDeadlineId'))
         if selectedRSDDeadline is not None:
@@ -611,7 +623,7 @@ def update_deadlines(request):
 
             recipients = pcm
 
-            notification.sendNotification("Review_Submission_Deadline", deadline_3.id, recipients)
+            notification.sendNotification("REVIEW_SUBMISSION_DEADLINE", recipients, {'date': deadline_3.deadline_date})
 
 
         selectedANDDeadline = (request.POST.get('andDeadlineId'))
@@ -621,7 +633,7 @@ def update_deadlines(request):
             deadline_4.save()
             notification = Notification()
             recipients = PCC.objects.all()
-            notification.sendNotification("Auther_Submission_Deadline", deadline_4.id, recipients)
+            notification.sendNotification("AUTHOR_NOTIFICATION_DEADLINE",  recipients, {'date': deadline_4.deadline_date})
 
         return HttpResponseRedirect('/deadlines/')
     else:

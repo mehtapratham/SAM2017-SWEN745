@@ -3,21 +3,39 @@
 {% block navbar_view-papers %}active{% endblock %}
 
 {% block body %}
-             {% block side_nav %}
-<nav class="sidenavpcc" style="width:12%;position: absolute">
-    <a href="/paper_assignment_pcc/" class="list-group-item active" id="link_mbr">Assign Papers</a>
-    <a href="/view_requests_pcc/" class="list-group-item" id="link_stat">Review Requests</a>
-    <a href="/promote_to_pcm/" class="list-group-item" id="link_promote">Promote Authors</a>
-<a href="/view_papers_to_review/" class="list-group-item active" id="link_reiew">Review Rate</a>
-</nav>
-{% endblock %}
+    {% block side_nav %}
+        <nav class="sidenavpcc" style="width:12%;position: absolute">
+            <a href="/paper_assignment_pcc/" class="list-group-item" id="link_mbr">Assign Papers</a>
+            <a href="/view_requests_pcc/" class="list-group-item" id="link_stat">Review Requests</a>
+            <a href="/promote_to_pcm/" class="list-group-item" id="link_promote">Promote Authors</a>
+            <a href="/view_papers_to_review/" class="list-group-item active" id="link_reiew">Review Rate</a>
+        </nav>
+    {% endblock %}
     {% block maincontent %}
-         <div class="container" style="margin-left: 15%;">
+        <div class="container" style="margin-left: 15%;">
+            <div class="container container-fluid">
+                <form method="post" action="/review_rate_pcc/{{paper.id}}/" >{% csrf_token %}
 
-<div class="container container-fluid">
-                 <form method="post" action="/review_rate_pcc/{{paper.id}}/" >{% csrf_token %}
 
-                     <table>
+
+
+                    <div class="form-group">
+                        <label for="id_review">Review:</label>
+                        <textarea cols="20" id="id_review" name="review" rows="3"></textarea>
+                        <span>{{ id_review.errors }}</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_rating">Rating:</label>
+                        <input id="id_rating" name="rating" type="number">
+                        <span>{{ id_rating.errors }}</span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">Review and Rate</button>
+                        <button class="btn btn-default" type="button" onclick="window.location.href='/paper-details/{{ paper.id }}/'">Cancel</button>
+                    </div>
+                    {% comment %}    <table>
             {% for field in form %}
             <tr>
                 <td>{{ field.label_tag }}</td>
@@ -27,11 +45,16 @@
             {% endfor %}
         </table>
                     <button  class="btn btn-primary" type="submit" >Review and Rate</button>
-                    <button  class="btn btn-primary" type="button" onclick="window.location.href='/paper-details/{{ paper.id }}/'" >Cancel</button>
+                    <button  class="btn btn-primary" type="button" onclick="window.location.href='/paper-details/{{ paper.id }}/'" >Cancel</button>{% endcomment %}
+
                 </form>
 
 
-</div>
+
+            </div>
+
         </div>
-        {% endblock %}
+        </div>
+    {% endblock %}
+
 {% endblock %}

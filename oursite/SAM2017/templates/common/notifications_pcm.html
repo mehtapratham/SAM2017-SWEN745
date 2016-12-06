@@ -1,0 +1,30 @@
+{% extends 'common/base_pcc.html' %}
+{% block title %}SAM2017 - View Notifications{% endblock %}
+{% block navbar_view-notifications %}active{% endblock %}
+
+{% block body %}
+  {% block side_nav %}
+<nav class="sidenavpcc" style="width:12%;position: absolute">
+   <a href="/selected_to_review_pcm/" class="list-group-item active" id="link_mbr">Review Papers</a>
+    <a href="/paper_selection_pcm/" class="list-group-item" id="link_stat">Select Paper to Review</a>
+</nav>
+{% endblock %}
+    {% block maincontent %}
+        <div class="container" style="margin-left: 15%;">
+    {% comment %}{% if user.is_authenticated %}{% endcomment %}
+    {% if notifications %}
+        <ul class="list-group">
+        {% for notification in notifications %}
+            <li class="list-group-item">
+            <strong>{{ notification.title }}</strong>
+            <h5>{{ notification.message }}</h5>
+            </li>
+        {% endfor %}
+        <button type="button" onclick="window.location.href='/delete_notifications_pcc/'">Delete Notifications</button>     </ul>
+    {% else %}
+        <p> You have no notifications</p>
+    {% endif %}
+   {% comment %} {% else %}
+        <p>Please login to view your notifications</p>
+    {% endif %}{% endcomment %}</div>{% endblock %}
+{% endblock %}
