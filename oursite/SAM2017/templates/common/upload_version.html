@@ -1,0 +1,26 @@
+{% extends 'common/base.html' %}
+{% block title %}SAM2017- Upload Paper{% endblock %}
+{% block navbar_upload-paper %}active{% endblock %}
+
+{% block body %}
+
+
+{% comment %}<button id="viewpapers" name="viewpapers" class="btn btn-default" onclick="window.location.href=/SAM2017/papers/'">Papers</button>{% endcomment %}
+
+
+<form method="post" class="form-horizontal" enctype="multipart/form-data" >{% csrf_token %}
+    <div class="container container-fluid">
+
+        <div class ="form-group">
+            <label for="file">Paper</label>
+            <p><input id="file" name= "file" type="file"></p>
+        </div>
+        <div class ="form-group">
+           <input id="authors" name= "authors" type="hidden" value={{ userid }}>
+        </div>
+        <button id="submit" name="submit" class="btn btn-success">Submit Paper</button>
+        <button id="cancel" name="cancel" class="btn btn-warning" onclick="window.location.href='/SAM2017/papers/'">Cancel</button>
+    </div>
+</form>
+
+{% endblock %}

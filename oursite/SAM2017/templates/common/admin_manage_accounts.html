@@ -3,44 +3,45 @@
 {% block navbar_index %}active{% endblock %}
 
 {% block body %}
-<table>
-<tr><td><div class="authors">Authors</div></td></tr>
+<table class="accounts-table">
+<tr class="header-row"><td colspan="3"><div class="authors">Authors</div></td></tr>
     {% for account in authors %}
     <tr>
         <td><div class="account-block">{{account.first_name}} {{account.last_name}}</div></td>
-        <td><button class="btn btn-primary promote-author" data-user-id={{account.id}}>Promote to PCM</button></td>
         <td><button class="btn btn-danger delete-user-btn" data-user-id={{account.id}}><span class="glyphicon glyphicon-trash"></span></button></td>
+        <td><button class="btn btn-primary promote-author" data-user-id={{account.id}}>Promote to PCM</button></td>
     </tr>
     {% endfor %}
 
-<tr><td><div class="authors">PCC</div></td></tr>
+<tr class="header-row"><td colspan="3"><div class="authors">PCC</div></td></tr>
 
     {% for account in pcc %}
     <tr>
         <td><div class="account-block">{{account.first_name}} {{account.last_name}}</div></td>
-        <td></td>
         <td><button class="btn btn-danger delete-user-btn" data-user-id={{account.id}}><span class="glyphicon glyphicon-trash"></span></button></td>
+        <td></td>
     </tr>
     {% endfor %}
 
-<tr><td><div class="authors">PCM</div></td></tr>
+<tr class="header-row"><td colspan="3"><div class="authors">PCM</div></td></tr>
 
     {% for account in pcm %}
     <tr>
         <td><div class="account-block">{{account.first_name}} {{account.last_name}}</div></td>
-        <td><button class="btn btn-warning demote-pcm" data-user-id={{account.id}}>Demote to Author</button></td>
+        <!--<button class="btn btn-warning demote-pcm" data-user-id={{account.id}}>Demote to Author</button>-->
         <td><button class="btn btn-danger delete-user-btn" data-user-id={{account.id}}><span class="glyphicon glyphicon-trash"></span></button></td>
+        <td></td>
     </tr>
     {% endfor %}
 
 
-<tr><td><div class="authors">Admins</div></td></tr>
+<tr class="header-row"><td colspan="3"><div class="authors">Admins</div></td></tr>
 
     {% for account in admins %}
     <tr>
         <td><div class="account-block">{{account.first_name}} {{account.last_name}}</div></td>
-        <td></td>
         <td><button class="btn btn-danger delete-user-btn" data-user-id={{account.id}}><span class="glyphicon glyphicon-trash"></span></button></td>
+        <td></td>
     </tr>
     {% endfor %}
 </table>

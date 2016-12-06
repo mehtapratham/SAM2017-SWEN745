@@ -12,13 +12,20 @@ class PaperForm(forms.ModelForm):
     class Meta:
         model = Paper
         fields = ('title','description','file','authors')
-		
+
+
+class VersionForm(forms.ModelForm):
+    class Meta:
+        model = Paper
+        fields = ('file','authors')
+
 class LoginForm(AuthenticationForm):
     username = forms.CharField(label="Email", max_length=30)
     password = forms.CharField(label="Password", max_length=30, min_length=8, widget=forms.PasswordInput())
     
     class Meta:
         model = SAMUser
+
 
 class UserCreationForm(UserCreationForm):
     username = forms.EmailField(label=_("Email"), widget=forms.EmailInput)

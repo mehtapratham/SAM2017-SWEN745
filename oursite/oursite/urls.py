@@ -42,8 +42,9 @@ urlpatterns = [
 
     url(r'^papers/$', sam_views.view_papers, name='view-papers'),
     url(r'^upload-paper/$', sam_views.upload_paper, name='upload-paper'),
+    url(r'^upload-another-version/(?P<paperId>[0-9]+)/$', sam_views.upload_another_version, name='upload-paper-version'),
     url(r'^papers/paper-details/(?P<paperId>[0-9]+)/$', sam_views.paper_details, name='paper-details'),
-    url(r'^papers/paper-uploads/uploaded_files/', sam_views.download_paper, name='download-paper'),
+    url(r'^doc-uploads/uploaded_files/(?P<papername>.*\.pdf)/$', sam_views.download_paper, name='download-paper'),
     url(r'^review-rate/(?P<paperId>\d+)', sam_views.reviewRating, name='review-rate'),
     url(r'^paper_details_author/(?P<paperId>[0-9]+)/$', sam_views.paper_details_author, name='paper_details_author'),
     url(r'^paper-details/(?P<paperId>[0-9]+)/$', sam_views.paper_details, name='paper-details'),

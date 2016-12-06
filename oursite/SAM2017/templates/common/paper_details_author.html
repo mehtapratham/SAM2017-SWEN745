@@ -10,7 +10,7 @@
         <p>Paper title : {{ paper.title }}</p>
         <p>Paper Description : {{ paper.description }}</p>
         <p>Paper Author : {{ author.first_name }} {{ author.last_name }}</p>
-
+        <a href="/upload-another-version/{{ paper.id }}/" class="btn btn-primary">Upload new version</a>
         <div>
             {%if reviews %}
         <ul class="list-group">
@@ -31,7 +31,7 @@
         </ul>
     {% else %}
                 <ul class="list-group"><li class="list-group-item">
-        <p>No reviews available yet.</p></li>
+                    <p>No reviews available yet.</p></li>
                 </ul>
     {% endif %}
 
