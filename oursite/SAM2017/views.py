@@ -552,25 +552,27 @@ def update_deadlines(request):
 #Admin-----------------------------------------
 @login_required(login_url=SAM_login_url)
 def accounts(request):
-    authors = SAMUser.objects.filter().exclude(is_admin=1)
+    if request.user.is_admin:
+        authors = SAMUser.objects.all().exclude(is_admin=True)
 
-    pcc = PCC.objects.all()
-    pcm = PCM.objects.all()
-    admins = SAMUser.objects.filter(is_admin=1)
+        pcc = PCC.objects.all().exclude(is_admin=True)
+        pcm = PCM.objects.all().exclude(is_admin=True)
+        admins = SAMUser.objects.filter(is_admin=True)
 
-    for user in pcc:
-        authors = authors.exclude(id = user.id)
+        for user in pcc:
+            authors = authors.exclude(id = user.id)
 
-    for user in pcm:
-        authors = authors.exclude(id = user.id)
+        for user in pcm:
+            authors = authors.exclude(id = user.id)
 
-    args = {}
-    args['authors'] = authors
-    args['pcc'] = pcc
-    args['pcm'] = pcm
-    args['admins'] = admins
-    return render_to_response("common/admin_manage_accounts.html", args, context_instance=RequestContext(request) )
-
+        args = {}
+        args['authors'] = authors
+        args['pcc'] = pcc
+        args['pcm'] = pcm
+        args['admins'] = admins
+        return render_to_response("common/admin_manage_accounts.html", args, context_instance=RequestContext(request) )
+    else:
+        return HttpResponseRedirect('/SAM2017/')
 
 def deleteUser(request, userId):
     user = SAMUser.objects.filter(id = userId)
