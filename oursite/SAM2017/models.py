@@ -130,11 +130,6 @@ class papers_selection(models.Model):
     def create(cls,pcm_user,pap):
         selection = cls(pcm_id=pcm_user,selected_paper_id=pap,decisions=False)
         selection.save()
-        notification = Notification()
-        users = PCC.objects.first()
-        recipient = [users]
-        notification.save()
-        notification.sendNotification('REVIEW_REQUESTED', recipient)
         return selection
 
 class Notification(models.Model):
@@ -184,9 +179,3 @@ class Deadline(models.Model):
 
     def __str__(self):
         return str(self.deadline_date)
-
-
-
-
-
-

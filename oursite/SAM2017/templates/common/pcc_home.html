@@ -3,18 +3,21 @@
 {% block navbar_index %}active{% endblock %}
 
 {% block body %}
-
+        {% block side_nav %}
+<nav class="sidenavpcc" style="width:12%;position: absolute">
+    <a href="/paper_assignment_pcc/" class="list-group-item" id="link_mbr">Assign Papers</a>
+    <a href="/view_requests_pcc/" class="list-group-item" id="link_stat">Review Requests</a>
+    <a href="/promote_to_pcm/" class="list-group-item" id="link_promote">Promote Authors</a>
+<a href="/view_papers_to_review/" class="list-group-item" id="link_reiew">Review Rate</a>
+</nav>
+{% endblock %}
+    {% block maincontent %}
+        <div class="container" style="margin-left: 15%;">
     <div class="jumbotron">
         <h2>Welcome PCC to SAM2017 </h2>
         <p>International Conference on Software Architecture Mining</p>
         <p>Feb 2017</p>
     </div>
-     {% block side_nav %}
-<div >
-    <a href="/paper_assignment_pcc/" class="list-group-item" id="link_mbr">Assign Papers to Review</a>
-    <a href="/view_requests_pcc/" class="list-group-item" id="link_stat">PCM Review Requests</a>
-    <a href="/promote_to_pcm/" class="list-group-item" id="link_promote">Promote Authors to PCM</a>
-<a href="/view_papers_to_review/" class="list-group-item" id="link_reiew">Review Rate Papers</a>
 </div>
 {% endblock %}
 {% endblock %}

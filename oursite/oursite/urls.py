@@ -72,7 +72,7 @@ urlpatterns = [
     url(r'^view_papers_to_review/$', sam_views.view_papers_to_review, name='view_papers_to_review'),
     url(r'^paper_review_pcc/(?P<paperId>[0-9]+)/$', sam_views.paper_review_pcc, name='paper_review_pcc'),
     url(r'^review_rate_pcc/(?P<paperId>[0-9]+)/$', sam_views.review_rate_pcc, name='review_rate_pcc'),
-
+    url(r'^notifications_pcc/$', sam_views.view_notifications_pcc, name='view-notifications_pcc'),
 
 
     url(r'^notifications/$', sam_views.view_notifications, name='view-notifications'),

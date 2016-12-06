@@ -260,6 +260,11 @@ def request_to_review(request,paperId):
     pcm_user = request.user.id
     pap = paperId
     papers_selection.create(pcm_user,pap)
+    notification = Notification()
+    users = PCC.objects.first()
+    recipient = [users]
+    notification.save()
+    notification.sendNotification('REVIEW_REQUESTED', recipient)
     return render_to_response('common/paper_selection_success.html')
 
 @login_required(login_url=SAM_login_url)
@@ -486,10 +491,17 @@ def login(request, template_name='common/login.html',
 
     return TemplateResponse(request, 'common/login.html', context)
 
+@login_required(login_url=SAM_login_url)
 def view_notifications(request):
     notifications = Notification.objects.filter(recipients = request.user)
     return render(request,'common/view-notifications.html',{'notifications':notifications})
-#Review and Rating
+
+@login_required(login_url=SAM_login_url)
+def view_notifications_pcc(request):
+    notifications = Notification.objects.filter(recipients = request.user)
+    return render(request,'common/notifications_pcc.html',{'notifications':notifications})
+
+@login_required(login_url=SAM_login_url)
 def reviewRating(request,paperId):
     papers = Paper.objects.get(id=paperId)
     user = request.user
@@ -504,7 +516,7 @@ def reviewRating(request,paperId):
             token = {}
             author = SAMUser.objects.get(id=papers.authors_id)
             notification = Notification()
-            users = PCC.objects.first()
+            users = author
             recipient = [users]
             recipient.append(author)
             notification.save()
@@ -525,6 +537,7 @@ def reviewRating(request,paperId):
     token['form'] = form
     return render_to_response('common/review-rate.html',token)
 
+@login_required(login_url=SAM_login_url)
 def view_paper_details(request,paperId):
     paper = Paper.objects.get(pk = paperId)
     context = {'paper' : paper}

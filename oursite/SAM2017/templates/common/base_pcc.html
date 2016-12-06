@@ -54,7 +54,7 @@
 
 
                     <li class="{% block navbar_view-notifications %}{% endblock %}">
-                        <a href="{% url 'view-notifications' %}">
+                        <a href="{% url 'view-notifications_pcc' %}">
                             <span class="glyphicon glyphicon-bell" aria-hidden="true"></span>&nbsp;
                             Notifications
                         </a>
@@ -74,10 +74,9 @@
     </div>
 </nav>
 
-<div class="container">
     {% block body %}
     {% endblock %}
-</div>
+
 
 
 <hr>
