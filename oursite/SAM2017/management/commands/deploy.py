@@ -12,8 +12,9 @@ class Command(BaseCommand):
 			SAMUser(username="satyajit@sam.com", password=make_password("holahola"), first_name="Satyajit", last_name="Mohapatra",  phone_number=1234567890, address="Pune",is_superuser=False,is_admin=False),
 			SAMUser(username="poornima@sam.com", password=make_password("holahola"), first_name="Poornima", last_name="Ubale",  phone_number=1234567890, address="Pune",is_superuser=False,is_admin=False),
 			SAMUser(username="eman@sam.com", password=make_password("holahola"), first_name="Eman", last_name="Alomar",  phone_number=1234567890, address="Pune",is_superuser=False,is_admin=False),
-            ])
-        
-        PCM.objects.bulk_create([
-            PCM(username="a@sam.com", password=make_password("holahola"), first_name="abc", last_name="def",  phone_number=1234567890, address="Pune",is_superuser=False,is_admin=False),
+            SAMUser(username="sam@sam.com", password=make_password("holahola"), first_name="Eman", last_name="Alomar",  phone_number=1234567890, address="Pune",is_superuser=False,is_admin=False),
+            SAMUser(username="scott@sam.com", password=make_password("holahola"), first_name="Eman", last_name="Alomar",  phone_number=1234567890, address="Pune",is_superuser=False,is_admin=False),
+            SAMUser(username="rit@sam.com", password=make_password("holahola"), first_name="Eman", last_name="Alomar",  phone_number=1234567890, address="Pune",is_superuser=False,is_admin=False),
+            SAMUser(username="se@sam.com", password=make_password("holahola"), first_name="Eman", last_name="Alomar",  phone_number=1234567890, address="Pune",is_superuser=False,is_admin=False),
+            SAMUser(username="hola@sam.com", password=make_password("holahola"), first_name="Eman", last_name="Alomar",  phone_number=1234567890, address="Pune",is_superuser=False,is_admin=False),
             ])
