@@ -3,16 +3,13 @@
 {% block navbar_index %}active{% endblock %}
 
 {% block body %}
-
-    <div class="jumbotron">
-        <h2>Welcome PCC to SAM2017 </h2>
-        <p>International Conference on Software Architecture Mining</p>
-        <p>Feb 2017</p>
-
-        <h4>Papers Assignment: </h4>
+        <h1>Papers Assignment: </h1>
             {% for paper in papers %}
-          <p>  <a href="/paper_selected_to_assign/{{ paper.id }}">Paper Title : {{ paper.title }}</a></p>
+          <blockquote>
+              <a class="paper-links" href="/paper_selected_to_assign/{{ paper.id }}">{{ paper.title }}</a>
+              <br/>
+              <p>{{paper.authors.first_name}} {{paper.authors.last_name}}</p>
+          </blockquote>
     {% endfor %}
 
-    </div>
 {% endblock %}

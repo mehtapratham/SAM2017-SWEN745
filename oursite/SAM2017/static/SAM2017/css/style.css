@@ -40,3 +40,13 @@ body {
 .accounts-table .header-row{
     border-bottom: 1px solid #dadada;
 }
+
+.paper-links{
+    text-decoration: none !important;
+    font-size: 20pt;
+    color: cadetblue;
+}
+
+.paper-item{
+    padding: 10px;
+}
