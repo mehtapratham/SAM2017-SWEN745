@@ -13,9 +13,7 @@
 
                 <blockquote>{{paper.description}}</blockquote>
 
-                <form method="get" action="paper-uploads/{{ paper.file }}" target="_blank">
-                    <button  class="btn btn-primary" type="submit" disabled>Download Paper</button>
-                </form>
+                    <a href="paper-uploads/{{ paper.file }}" class="btn btn-primary">Download Paper</a>
                 </div>
             </li>
         {% endfor %}

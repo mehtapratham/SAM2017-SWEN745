@@ -12,11 +12,11 @@
     <div class="container container-fluid">
         <div class ="form-group">
             <label for="title">Title</label>
-            <textarea class="form-control" id="title" value="{{form.title.value}}" name="title" type="text"  placeholder="A study of.." rows="1" required ></textarea></br>
+            <textarea class="form-control" id="title" value="{% if form.title.value %}{{form.title.value}}{% endif %}" name="title" type="text"  placeholder="A study of.." rows="1" required ></textarea></br>
         </div>
         <div class ="form-group">
             <label for="description">Description</label>
-            <textarea class="form-control" id="description" value="{{form.description.value}}" name="description" type="text" placeholder="Brief description of the papers content..." class="form-control input-md" required rows="5"></textarea></br>
+            <textarea class="form-control" id="description" value="{% if form.description.value %}{{form.description.value}}{% endif %}" name="description" type="text" placeholder="Brief description of the papers content..." class="form-control input-md" required rows="5"></textarea></br>
         </div>
         <div class ="form-group">
             <label for="title">Paper</label>
