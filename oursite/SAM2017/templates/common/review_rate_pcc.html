@@ -1,0 +1,24 @@
+{% extends 'common/base_pcc.html' %}
+{% block title %}SAM2017-View Papers{% endblock %}
+{% block navbar_view-papers %}active{% endblock %}
+
+{% block body %}
+<div class="container container-fluid">
+                 <form method="post" action="/review_rate_pcc/{{paper.id}}/" >{% csrf_token %}
+
+                     <table>
+            {% for field in form %}
+            <tr>
+                <td>{{ field.label_tag }}</td>
+                <td>{{ field }}</td>
+                <td>{{ field.errors }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+                    <button  class="btn btn-primary" type="submit" >Review and Rate</button>
+                    <button  class="btn btn-primary" type="button" onclick="window.location.href='/paper-details/{{ paper.id }}/'" >Cancel</button>
+                </form>
+
+
+</div>
+{% endblock %}
