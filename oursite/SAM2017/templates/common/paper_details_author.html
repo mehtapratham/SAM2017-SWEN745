@@ -15,9 +15,13 @@
             {%if reviews %}
         <ul class="list-group">
         {%for review in reviews%}
+
             <li class="list-group-item">
                 <div>
-                <h4>Reviewer Name: {% for user in pcm %} {% if user.id == review.reviwer_id %}{{ user.first_name }} {{ user.last_name }}{% endif %}{% endfor %}</h4>
+                {% if review.is_Final %}
+                <h3>Final Review</h3>
+                {% endif %}
+                <h4>Reviewer Name: {% if review.is_Final %} {{ pcc.first_name }} {{ pcc.last_name }}{% else %} {% for user in pcm %} {% if user.id == review.reviwer_id %}{{ user.first_name }} {{ user.last_name }}{% endif %}{% endfor %}{% endif %}</h4>
                 <p>Review:</p>
                 <blockquote>{{review.review}}</blockquote>
                  <p>Rating: {{ review.rating }}</p>

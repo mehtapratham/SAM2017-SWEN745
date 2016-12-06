@@ -130,6 +130,11 @@ class papers_selection(models.Model):
     def create(cls,pcm_user,pap):
         selection = cls(pcm_id=pcm_user,selected_paper_id=pap,decisions=False)
         selection.save()
+        notification = Notification()
+        users = PCC.objects.first()
+        recipient = [users]
+        notification.save()
+        notification.sendNotification('REVIEW_REQUESTED', recipient)
         return selection
 
 class Notification(models.Model):
@@ -146,6 +151,7 @@ class Notification(models.Model):
         'NEW_PAPER': {'title':'New Paper','message':'A new paper has been uploaded.'},
         'SUB_FORMAT_ERROR':{'title':'Submission Format Error','message':'Submission Format Error'},
         'PAPER_ASSIGNED':{'title':'Paper Assigned','message':'A Paper has been assigned to you.'},
+        'REVIEW_REQUESTED': {'title': 'Review Requested', 'message': 'A PCM has sent you request to review a paper.'},
         'ASSIGN_PAPER':{'title':'Assignment Pending','message':'There are few papers that are yet to be assigned to committee members. Please review these.'},
         'REVIEW_PAPER':{'title':'Review Pending','message':'A paper assigned to you is pending review.'},
         'FINAL_REVIEW_REQ':{'title':'Provide Final Rating','message':'Reviews from the PCMs are in. Please provide a final review and rating.'},

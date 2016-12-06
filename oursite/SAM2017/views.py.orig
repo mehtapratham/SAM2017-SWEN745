@@ -25,6 +25,7 @@ from django.utils.encoding import smart_str
 import functools
 import warnings
 
+from django.conf import settings
 # Avoid shadowing the login() and logout() views below.
 from django.contrib.auth import (
     REDIRECT_FIELD_NAME, get_user_model, login as auth_login,
@@ -61,9 +62,6 @@ home_page = reverse_lazy("home")
 #index page, i.e. Homepage after log-in
 @login_required(login_url=SAM_login_url)
 def index(request):
-    if request.user.is_admin:
-        return HttpResponseRedirect('/sam/admin/accounts/')
-
     u_id=request.user.id
     token={}
     if(PCC.objects.filter(id = u_id)):
@@ -76,12 +74,12 @@ def index(request):
         return render_to_response('common/pcm_home.html',token)
     return render_to_response('common/index.html')
 
-
 @login_required(login_url=SAM_login_url)
 def pcc_home(request):
     id=request.user.id
     return render_to_response('common/pcc_home.html')
-@login_required(login_url=SAM_login_url)
+
+<<<<<<< HEAD
 def view_papers_to_review(request):
     token={}
     reviews_done = ReviewRating.objects.values('paper_id').annotate(dcount=Count('paper_id')).filter(dcount=3)
@@ -95,39 +93,11 @@ def view_papers_to_review(request):
     token['papers'] = Paper.objects.all()
     return render_to_response('common/view_papers_to_review.html',token)
 
+
+@login_required(login_url=SAM_login_url)	
+=======
 @login_required(login_url=SAM_login_url)
-def paper_review_pcc(request,paperId):
-    paper=Paper.objects.get(id=paperId)
-    token={}
-    token['paper']=paper
-    return render_to_response('common/paper_review_pcc.html',token)
-
-@login_required(login_url=SAM_login_url)
-def review_rate_pcc(request,paperId):
-    paper=Paper.objects.get(id=paperId)
-    user = request.user
-    if request.method == 'POST':
-
-        # create a form instance and populate it with data from the request
-        form = ReviewRateForm(data=request.POST)
-
-        if form.is_valid():
-            new = ReviewRating(reviwer_id=user.id, paper_id=paper.id, review=form.cleaned_data["review"],
-                               rating=form.cleaned_data["rating"],is_Final=True)
-            new.save()
-            return HttpResponseRedirect(resolve_url('view_papers_to_review'))
-
-    else:
-        form = ReviewRateForm()
-
-    token = {}
-    token['paper'] = paper
-    token.update(csrf(request))
-    token['form'] = form
-    return render_to_response('common/review_rate_pcc.html', token)
-
-
-@login_required(login_url=SAM_login_url)
+>>>>>>> 80d49e483d0d2fa0fe669f5b2332bdf54dbe6e47
 def upload_paper(request):
     if request.POST:
         form = PaperForm(request.POST,request.FILES)
@@ -148,42 +118,13 @@ def upload_paper(request):
     args['userid']=request.user.id
     return render_to_response('common/upload-paper.html',args)
 
-
-@login_required(login_url=SAM_login_url)
-def upload_another_version(request, paperId):
-    paper = Paper.objects.get(id=paperId)
-    if request.POST:
-        form = VersionForm(request.POST,request.FILES)
-        if form.is_valid():
-            paper.file = form.cleaned_data['file']
-            paper.version += 1
-            paper.save()
-            notification = Notification()
-            users = PCC.objects.first()
-            recipient = [users]
-            notification.save()
-            notification.sendNotification('NEW_PAPER', recipient)
-            return HttpResponseRedirect('/papers/')
-    else:
-        form = VersionForm()
-    args={}
-    args.update(csrf(request))
-    args['form']=form
-    print(request.user.id)
-    args['userid']=request.user.id
-    return render_to_response('common/upload_version.html',args)
-
-
 @login_required(login_url=SAM_login_url)
 def paper_details_author(request,paperId):
     paper = Paper.objects.get(id=paperId)
     token={}
     reviews=ReviewRating.objects.filter(paper_id=paperId)
     author=SAMUser.objects.get(id=paper.authors_id)
-    pcm=PCM.objects.all()
-    pcc=PCC.objects.first()
-    token['pcc']=pcc
-    token['pcm']=pcm
+    token['pcm']=PCM.objects.all()
     token['paper']=paper
     token['user_id']=request.user.id
     token['author'] = author
@@ -209,8 +150,6 @@ def paper_selected_to_assign(request,paperId):
     token={}
     reviewers=[]
     paper = Paper.objects.get(id=paperId)
-    if paper.numofreviewers >= 3:
-        return HttpResponseRedirect(resolve_url('paper_assignment_pcc'))
     list_of_reviewers = PCM.objects.all().exclude(id=paper.authors_id)
     for li in list_of_reviewers:
         abc = papers_selection.objects.filter(selected_paper_id=paperId).filter(pcm_id=li.id).filter(decisions=True)
@@ -226,19 +165,12 @@ def paper_selected_to_assign(request,paperId):
 def assigned_reviewer(request, paperId,reviewerId):
     token={}
     paper=Paper.objects.get(id=paperId)
-    if paper.numofreviewers < 3:
-        new_add = papers_selection.objects.create(decisions=True,selected_paper_id=paperId,pcm_id=reviewerId)
-        paper.numofreviewers = paper.numofreviewers + 1
-        paper.save()
-        new_add.save()
-        notification = Notification()
-        users = PCM.objects.get(id=reviewerId)
-        recipient = [users]
-        notification.save()
-        notification.sendNotification('PAPER_ASSIGNED', recipient)
-        return HttpResponseRedirect(resolve_url('paper_assignment_pcc'))
-    else:
-        return HttpResponseRedirect(resolve_url('paper_assignment_pcc'))
+    reviewer=PCM.objects.get(id=reviewerId)
+    new_add = papers_selection.objects.create(decisions=True,selected_paper_id=paperId,pcm_id=reviewerId)
+    paper.numofreviewers = paper.numofreviewers + 1
+    paper.save()
+    return render_to_response("common/assigned_reviewer.html",token)
+
 @login_required(login_url=SAM_login_url)
 def paper_selection_pcm(request):
     token={}
@@ -299,11 +231,10 @@ def paper_details(request,paperId):
     return render_to_response('common/paper-details.html',token)
 
 
-def download_paper(request, papername):
-    paper = open(settings.MEDIA_ROOT +'/uploaded_files/' + papername, 'rb').read()
-    response = HttpResponse(paper, content_type='application/pdf')
-    response['Content-Disposition'] = 'filename=%s' % smart_str(papername)
-    # response['X-Sendfile'] = smart_str(settings.MEDIA_ROOT +'/uploaded_files/' + papername)
+def download_paper(request):
+    response = HttpResponse(content_type='application/pdf') # mimetype is replaced by content_type for django 1.7
+    response['Content-Disposition'] = 'attachment; filename=%s' % smart_str(request.path)
+    response['X-Sendfile'] = smart_str(request.path)
     return response
 
 
@@ -323,13 +254,7 @@ def paper_details_pcc(request,paperId):
 @login_required(login_url=SAM_login_url)
 def view_requests_pcc(request):
     token={}
-    paper_requests = papers_selection.objects.filter(decisions=False)
-    for pap in paper_requests:
-        paper=Paper.objects.get(id=pap.selected_paper_id)
-        if paper.numofreviewers >= 3:
-            pap.delete()
-    paper_selected=papers_selection.objects.filter(decisions=False)
-    token['paper_selected']=paper_selected
+    token['paper_selected'] = papers_selection.objects.filter(decisions=False)
     return render_to_response("common/view_requests_pcc.html",token)
 
 @login_required(login_url=SAM_login_url)
@@ -339,9 +264,6 @@ def paper_approve(request,Id):
     token = {}
     token['paper'] = paper
     num_of_reviewers = paper.numofreviewers
-    if num_of_reviewers >= 3:
-        pap.delete()
-        return HttpResponseRedirect(resolve_url('view_requests_pcc'))
     paper.numofreviewers = num_of_reviewers+1
     paper.save()
     pap.decisions = True
@@ -497,12 +419,6 @@ def reviewRating(request,paperId):
             new.save()
             token = {}
             author = SAMUser.objects.get(id=papers.authors_id)
-            notification = Notification()
-            users = PCC.objects.first()
-            recipient = [users]
-            recipient.append(author)
-            notification.save()
-            notification.sendNotification('REVIEW_RESULTS', recipient)
             token['pcm'] = PCM.objects.all()
             token['paper'] = papers
             token['user_id'] = request.user.id
@@ -586,9 +502,9 @@ def update_deadlines(request):
             deadline_4 = Deadline.objects.get(deadline_type='AND')
             deadline_4.deadline_date = selectedANDDeadline
             deadline_4.save()
-            notification = Notification()
-            recipients = PCC.objects.all()
-            notification.sendNotification("Auther_Submission_Deadline", deadline_4.id, recipients)
+            # notification = Notification()
+            # recipients = [SAMUser]
+            # notification.sendNotification("Auther_Submission_Deadline", and_deadline.id, recipients)
 
         return HttpResponseRedirect('/deadlines/')
     else:
@@ -610,27 +526,25 @@ def update_deadlines(request):
 #Admin-----------------------------------------
 @login_required(login_url=SAM_login_url)
 def accounts(request):
-    if request.user.is_admin:
-        authors = SAMUser.objects.all().exclude(is_admin=True)
+    authors = SAMUser.objects.filter().exclude(is_admin=1)
 
-        pcc = PCC.objects.all().exclude(is_admin=True)
-        pcm = PCM.objects.all().exclude(is_admin=True)
-        admins = SAMUser.objects.filter(is_admin=True)
+    pcc = PCC.objects.all()
+    pcm = PCM.objects.all()
+    admins = SAMUser.objects.filter(is_admin=1)
 
-        for user in pcc:
-            authors = authors.exclude(id = user.id)
+    for user in pcc:
+        authors = authors.exclude(id = user.id)
 
-        for user in pcm:
-            authors = authors.exclude(id = user.id)
+    for user in pcm:
+        authors = authors.exclude(id = user.id)
 
-        args = {}
-        args['authors'] = authors
-        args['pcc'] = pcc
-        args['pcm'] = pcm
-        args['admins'] = admins
-        return render_to_response("common/admin_manage_accounts.html", args, context_instance=RequestContext(request) )
-    else:
-        return HttpResponseRedirect('/SAM2017/')
+    args = {}
+    args['authors'] = authors
+    args['pcc'] = pcc
+    args['pcm'] = pcm
+    args['admins'] = admins
+    return render_to_response("common/admin_manage_accounts.html", args, context_instance=RequestContext(request) )
+
 
 def deleteUser(request, userId):
     user = SAMUser.objects.filter(id = userId)
