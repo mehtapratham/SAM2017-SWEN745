@@ -1,4 +1,4 @@
-{% extends 'common/base.html' %}
+{% extends 'common/base_pcc.html' %}
 {% block title %}SAM2017- Welcome{% endblock %}
 {% block navbar_index %}active{% endblock %}
 
@@ -8,25 +8,13 @@
         <h2>Welcome PCC to SAM2017 </h2>
         <p>International Conference on Software Architecture Mining</p>
         <p>Feb 2017</p>
-
-        <h4>Papers Assigned to review:</h4>
-        {% if papers_assigned  %}
-        {% for paper in papers_assigned  %}
-            <a href="/paper-details/{{ paper.selected_paper_id }}/">Paper ID : {{ paper.selected_paper_id }}</a>
-    {% endfor %}
-        {% else %}
-        <p>No Papers assigned to review.</p>
-    {% endif %}
-    <h4>Papers Reviewed by PCMs:</h4>
-        {% for paper in papers_reviewed  %}
-           <p> <a href="/paper-details/{{ paper.id }}/">Paper ID : {{ paper.paper_id }}</a>
-    </p>{% endfor %}
     </div>
      {% block side_nav %}
 <div >
     <a href="/paper_assignment_pcc/" class="list-group-item active" id="link_mbr">Assign Papers to Review</a>
     <a href="/view_requests_pcc/" class="list-group-item" id="link_stat">PCM Review Requests</a>
     <a href="/promote_to_pcm/" class="list-group-item" id="link_promote">Promote Authors to PCM</a>
+<a href="/view_papers_to_review/" class="list-group-item" id="link_reiew">Review Rate Papers</a>
 </div>
 {% endblock %}
 {% endblock %}

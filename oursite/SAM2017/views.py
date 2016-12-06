@@ -12,6 +12,7 @@ from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, render_to_response, redirect, resolve_url, \
     get_object_or_404
 from django.template.context import RequestContext
+from django.db.models import Count
 from django.template.context_processors import request
 from django.template.response import TemplateResponse
 from django.utils.http import is_safe_url
@@ -76,6 +77,20 @@ def index(request):
 def pcc_home(request):
     id=request.user.id
     return render_to_response('common/pcc_home.html')
+
+def view_papers_to_review(request):
+    token={}
+    reviews_done = ReviewRating.objects.values('paper_id').annotate(dcount=Count('paper_id')).filter(dcount=3)
+    pcc_to_review = []
+    i = 0
+    for rev in reviews_done:
+        pap = Paper.objects.get(id=reviews_done[i]['paper_id'])
+        pcc_to_review.append(pap)
+        i = i + 1
+    token['pcc_to_review'] = pcc_to_review
+    token['papers'] = Paper.objects.all()
+    return render_to_response('common/view_papers_to_review.html',token)
+
 
 @login_required(login_url=SAM_login_url)	
 def upload_paper(request):
