@@ -528,9 +528,9 @@ def update_deadlines(request):
             deadline_4 = Deadline.objects.get(deadline_type='AND')
             deadline_4.deadline_date = selectedANDDeadline
             deadline_4.save()
-            # notification = Notification()
-            # recipients = [SAMUser]
-            # notification.sendNotification("Auther_Submission_Deadline", and_deadline.id, recipients)
+            notification = Notification()
+            recipients = PCC.objects.all()
+            notification.sendNotification("Auther_Submission_Deadline", deadline_4.id, recipients)
 
         return HttpResponseRedirect('/deadlines/')
     else:
