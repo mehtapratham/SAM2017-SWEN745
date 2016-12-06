@@ -28,7 +28,8 @@
     {% for account in pcm %}
     <tr>
         <td><div class="account-block">{{account.first_name}} {{account.last_name}}</div></td>
-        <td><button class="btn btn-warning demote-pcm" data-user-id={{account.id}}>Demote to Author</button></td>
+        <!--<button class="btn btn-warning demote-pcm" data-user-id={{account.id}}>Demote to Author</button>-->
+        <td></td>
         <td><button class="btn btn-danger delete-user-btn" data-user-id={{account.id}}><span class="glyphicon glyphicon-trash"></span></button></td>
     </tr>
     {% endfor %}
