@@ -236,7 +236,9 @@ def assigned_reviewer(request, paperId,reviewerId):
         recipient = [users]
         notification.save()
         notification.sendNotification('PAPER_ASSIGNED', recipient)
-        return HttpResponseRedirect(resolve_url('paper_assignment_pcc'))
+        if paper.numofreviewers == 3:
+            return HttpResponseRedirect(resolve_url('paper_assignment_pcc'))
+        return HttpResponseRedirect(resolve_url('/paper_selected_to_assign/'+paperId+'/', token))
     else:
         return HttpResponseRedirect(resolve_url('paper_assignment_pcc'))
 @login_required(login_url=SAM_login_url)
@@ -267,8 +269,12 @@ def review_papers_pcm(request):
     token={}
     papers=[]
     for paper in list_of_papers:
-        pap = Paper.objects.get(id=paper.selected_paper_id)
-        papers.append(pap)
+        review_rate = ReviewRating.objects.filter(reviwer_id=pcm_user).filter(paper_id=paper.selected_paper_id)
+        if review_rate:
+            print('')
+        else:
+            pap = Paper.objects.get(id=paper.selected_paper_id)
+            papers.append(pap)
     token['papers'] = papers
     return render_to_response('common/review_papers_pcm.html',token)
 
